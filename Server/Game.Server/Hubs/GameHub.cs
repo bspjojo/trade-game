@@ -11,5 +11,10 @@ namespace Game.Server.Hubs
         {
             return Groups.AddToGroupAsync(Context.ConnectionId, gameId);
         }
+
+        public Task LeaveGame(string gameId)
+        {
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, gameId);
+        }
     }
 }

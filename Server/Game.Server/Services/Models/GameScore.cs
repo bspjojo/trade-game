@@ -22,7 +22,7 @@ namespace Game.Server.Services.Models
         public string Id { get; set; }
         public CountryYearConsumptionResourceValues Targets { get; set; }
         public CountryYearConsumptionResourceValues Scores { get; set; }
-        //public CountryYearProductionResources ProductionResources { get; set; }
+        public CountryYearProductionResources ProductionResources { get; set; }
     }
 
     public class ScoreUpdatedBroadcastModel

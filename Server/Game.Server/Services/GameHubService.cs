@@ -28,8 +28,7 @@ namespace Game.Server.Services
                 Scores = scores
             };
 
-            return _gameHubContext.Clients.All.ScoresUpdated(broadCastModel);
-            //return _gameHubContext.Clients.Group(gameId).ScoresUpdated(countryId, year, scores);
+            return _gameHubContext.Clients.Group(gameId).ScoresUpdated(broadCastModel);
         }
     }
 }
