@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Game.Server.Hubs;
 using Game.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,8 +30,21 @@ namespace Game.Server
             services.AddSingleton<IGameDataService, InMemoryGameDataService>();
             services.AddSingleton<IGameFlowService, GameFlowService>();
             services.AddSingleton<IGameScoreService, GameScoreService>();
+            services.AddSingleton<IGameHubService, GameHubService>();
+
+            services.AddCors(o =>
+                o.AddPolicy("All",
+                    b => b
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                    )
+                );
 
             services.AddMvc();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +54,13 @@ namespace Game.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("All");
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameHub>("/hubs/game");
+            });
 
             app.UseMvc();
         }

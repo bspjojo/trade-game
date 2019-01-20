@@ -10,7 +10,6 @@ namespace Game.Server.Services.Models
 
     public class CountryYearConsumptionResourceValues
     {
-        public string Id { get; set; }
         public int Energy { get; set; }
         public int Chocolate { get; set; }
         public int Meat { get; set; }
@@ -20,7 +19,6 @@ namespace Game.Server.Services.Models
 
     public class CountryYearProductionResources
     {
-        public string Id { get; set; }
         public int Oil { get; set; }
         public int Cocoa { get; set; }
         public int Meat { get; set; }

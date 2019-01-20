@@ -13,9 +13,11 @@ namespace Game.Server.Services
     {
         private readonly IGameDataService _gameDataService;
         private readonly IGameScoreService _gameScoreService;
+        private readonly IGameHubService _gameHubService;
 
-        public GameFlowService(IGameDataService gameDataService, IGameScoreService gameScoreService)
+        public GameFlowService(IGameDataService gameDataService, IGameScoreService gameScoreService, IGameHubService gameHubService)
         {
+            _gameHubService = gameHubService;
             _gameDataService = gameDataService;
             _gameScoreService = gameScoreService;
         }
@@ -29,10 +31,14 @@ namespace Game.Server.Services
 
             _gameScoreService.CalculateYearValues(year, country, productionRecorded);
 
+            var scores = country.Years[year].Scores;
+
+            await _gameHubService.ScoresUpdated(gameId, countryId, year, scores);
+
             return new ScoreServiceResult
             {
                 NextYearTarget = country.Years[year + 1].Targets,
-                Excess = CalculateExcessFromScores(country.Years[year].Scores)
+                Excess = CalculateExcessFromScores(scores)
             };
         }
 
