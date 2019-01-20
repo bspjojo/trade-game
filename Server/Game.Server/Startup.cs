@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Game.Server.Configuration;
 using Game.Server.Hubs;
 using Game.Server.Services;
 using Microsoft.AspNetCore.Builder;
@@ -32,10 +33,12 @@ namespace Game.Server
             services.AddSingleton<IGameScoreService, GameScoreService>();
             services.AddSingleton<IGameHubService, GameHubService>();
 
+            var corsConfig = Configuration.GetSection("Cors").Get<CorsConfig>();
+
             services.AddCors(o =>
                 o.AddPolicy("All",
                     b => b
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins(corsConfig.AllowedHosts)
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()
