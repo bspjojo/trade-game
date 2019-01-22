@@ -49,20 +49,9 @@ namespace Game.Server.Services
             var deficit = targetValue - production;
             var score = production - targetValue;
 
-            var nextTarget = 0;
-
-            if (deficit <= 0)
-            {
-                nextTarget = breakEvenResourceValue;
-            }
-            else
-            {
-                nextTarget = breakEvenResourceValue + deficit;
-            }
-
             setExcess(CalculateExcessForScore(score));
             setScore(score);
-            sentNextTargetValue(nextTarget);
+            sentNextTargetValue(CalculateNextTarget(deficit, breakEvenResourceValue));
         }
 
         private int CalculateExcessForScore(int scoreValue)
@@ -73,6 +62,18 @@ namespace Game.Server.Services
             }
 
             return 0;
+        }
+
+        private int CalculateNextTarget(int deficit, int breakEven)
+        {
+            if (deficit <= 0)
+            {
+                return breakEven;
+            }
+            else
+            {
+                return breakEven + deficit;
+            }
         }
     }
 }
