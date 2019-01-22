@@ -34,18 +34,17 @@ namespace Game.Server.Test.Services
         [Fact]
         public async void ScoresUpdated_ShouldUseGroupMatchingTheGameId()
         {
-            var scores = new CountryYearConsumptionResourceValues();
+            var scores = new ConsumptionResources();
 
             await _gameHubService.ScoresUpdated("gameId", "countryId", 2, scores);
 
             _mockHubClients.Verify(m => m.Group("gameId"));
         }
 
-
         [Fact]
         public async void ScoresUpdated_ShouldSendAScoreUpdatedBroadcastModelWith_CountryIdYearAndScores()
         {
-            var scores = new CountryYearConsumptionResourceValues();
+            var scores = new ConsumptionResources();
 
             await _gameHubService.ScoresUpdated("gameId", "countryId", 2, scores);
 

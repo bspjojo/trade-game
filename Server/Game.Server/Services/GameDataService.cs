@@ -38,7 +38,7 @@ namespace Game.Server.Services
             var year0 = new CountryYear
             {
                 Id = "0",
-                Targets = new CountryYearConsumptionResourceValues
+                Targets = new ConsumptionResources
                 {
                     Energy = 4,
                     Chocolate = 4,

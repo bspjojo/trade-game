@@ -6,23 +6,23 @@ namespace Game.Server.Services
 {
     public interface IGameFlowService
     {
-        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string gameId, string countryId, int year, CountryYearConsumptionResourceValues productionRecorded);
+        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string gameId, string countryId, int year, ConsumptionResources productionRecorded);
     }
 
     public class GameFlowService : IGameFlowService
     {
         private readonly IGameDataService _gameDataService;
-        private readonly IGameScoreService _gameScoreService;
         private readonly IGameHubService _gameHubService;
+        private readonly IGameScoreService _gameScoreService;
 
-        public GameFlowService(IGameDataService gameDataService, IGameScoreService gameScoreService, IGameHubService gameHubService)
+        public GameFlowService(IGameDataService gameDataService, IGameHubService gameHubService, IGameScoreService gameScoreService)
         {
-            _gameHubService = gameHubService;
             _gameDataService = gameDataService;
+            _gameHubService = gameHubService;
             _gameScoreService = gameScoreService;
         }
 
-        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string gameId, string countryId, int year, CountryYearConsumptionResourceValues productionRecorded)
+        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string gameId, string countryId, int year, ConsumptionResources productionRecorded)
         {
             var country = await _gameDataService.GetCountryById(gameId, countryId);
 
@@ -32,36 +32,15 @@ namespace Game.Server.Services
             _gameScoreService.CalculateYearValues(year, country, productionRecorded);
 
             var scores = country.Years[year].Scores;
+            var excess = country.Years[year].Excess;
 
             await _gameHubService.ScoresUpdated(gameId, countryId, year, scores);
 
             return new ScoreServiceResult
             {
                 NextYearTarget = country.Years[year + 1].Targets,
-                Excess = CalculateExcessFromScores(scores)
+                Excess = excess
             };
-        }
-
-        private CountryYearConsumptionResourceValues CalculateExcessFromScores(CountryYearConsumptionResourceValues scores)
-        {
-            return new CountryYearConsumptionResourceValues
-            {
-                Energy = CalculateExcessForScore(scores.Energy),
-                Chocolate = CalculateExcessForScore(scores.Chocolate),
-                Meat = CalculateExcessForScore(scores.Meat),
-                Grain = CalculateExcessForScore(scores.Grain),
-                Textiles = CalculateExcessForScore(scores.Textiles)
-            };
-        }
-
-        private int CalculateExcessForScore(int scoreValue)
-        {
-            if (scoreValue > 0)
-            {
-                return scoreValue;
-            }
-
-            return 0;
         }
     }
 }

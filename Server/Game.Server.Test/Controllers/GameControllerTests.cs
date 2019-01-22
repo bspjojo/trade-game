@@ -19,13 +19,13 @@ namespace Game.Server.Test.Controllers
         {
             _mockIGameFlowService = new Mock<IGameFlowService>();
             _mockIGameFlowService
-                .Setup(m => m.ExecuteUpdateScoreFlow(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<CountryYearConsumptionResourceValues>()))
+                .Setup(m => m.ExecuteUpdateScoreFlow(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<ConsumptionResources>()))
                 .ReturnsAsync(() => _executeUpdateScoreFlowResponse);
 
             _executeUpdateScoreFlowResponse = new ScoreServiceResult
             {
-                Excess = new CountryYearConsumptionResourceValues(),
-                NextYearTarget = new CountryYearConsumptionResourceValues()
+                Excess = new ConsumptionResources(),
+                NextYearTarget = new ConsumptionResources()
             };
 
             _controller = new GameController(_mockIGameFlowService.Object);
@@ -39,7 +39,7 @@ namespace Game.Server.Test.Controllers
                 GameId = "gameId",
                 CountryId = "countryId",
                 Year = 3,
-                YearResults = new CountryYearConsumptionResourceValues()
+                YearResults = new ConsumptionResources()
             };
 
             await _controller.UpdateScores(update);
@@ -55,7 +55,7 @@ namespace Game.Server.Test.Controllers
                 GameId = "gameId",
                 CountryId = "countryId",
                 Year = 3,
-                YearResults = new CountryYearConsumptionResourceValues()
+                YearResults = new ConsumptionResources()
             };
 
             var response = await _controller.UpdateScores(update);
