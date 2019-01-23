@@ -5,12 +5,12 @@ namespace Game.Server.Services
 {
     public interface IGameScoreService
     {
-        void CalculateYearValues(int year, GameCountry country, ConsumptionResources productionRecorded);
+        void CalculateYearValues(int year, GameCountry country, ConsumptionResources consumptionRecorded);
     }
 
     public class GameScoreService : IGameScoreService
     {
-        public void CalculateYearValues(int year, GameCountry country, ConsumptionResources productionRecorded)
+        public void CalculateYearValues(int year, GameCountry country, ConsumptionResources consumptionRecorded)
         {
             var breakEven = country.Years[0].Targets;
 
@@ -26,28 +26,28 @@ namespace Game.Server.Services
                 country.Years[year + 1].Targets = nextYearTargets;
             }
 
-            CalculateScoresAndTargetsForCountryYearResources(breakEven, currentYearTargets, productionRecorded, nextYearTargets, currentYearScores, currentYearExcess);
+            CalculateScoresAndTargetsForCountryYearResources(breakEven, currentYearTargets, consumptionRecorded, nextYearTargets, currentYearScores, currentYearExcess);
         }
 
         private void CalculateScoresAndTargetsForCountryYearResources(
             ConsumptionResources breakEvenTarget,
             ConsumptionResources consumptionTarget,
-            ConsumptionResources resourcesProduced,
+            ConsumptionResources consumptionsProduced,
             ConsumptionResources nextYearTargets,
             ConsumptionResources currentYearScores,
             ConsumptionResources excesses)
         {
-            CalculateValuesForResource(breakEvenTarget.Grain, consumptionTarget.Grain, resourcesProduced.Grain, v => nextYearTargets.Grain = v, v => currentYearScores.Grain = v, v => excesses.Grain = v);
-            CalculateValuesForResource(breakEvenTarget.Meat, consumptionTarget.Meat, resourcesProduced.Meat, v => nextYearTargets.Meat = v, v => currentYearScores.Meat = v, v => excesses.Meat = v);
-            CalculateValuesForResource(breakEvenTarget.Chocolate, consumptionTarget.Chocolate, resourcesProduced.Chocolate, v => nextYearTargets.Chocolate = v, v => currentYearScores.Chocolate = v, v => excesses.Chocolate = v);
-            CalculateValuesForResource(breakEvenTarget.Energy, consumptionTarget.Energy, resourcesProduced.Energy, v => nextYearTargets.Energy = v, v => currentYearScores.Energy = v, v => excesses.Energy = v);
-            CalculateValuesForResource(breakEvenTarget.Textiles, consumptionTarget.Textiles, resourcesProduced.Textiles, v => nextYearTargets.Textiles = v, v => currentYearScores.Textiles = v, v => excesses.Textiles = v);
+            CalculateValuesForResource(breakEvenTarget.Grain, consumptionTarget.Grain, consumptionsProduced.Grain, v => nextYearTargets.Grain = v, v => currentYearScores.Grain = v, v => excesses.Grain = v);
+            CalculateValuesForResource(breakEvenTarget.Meat, consumptionTarget.Meat, consumptionsProduced.Meat, v => nextYearTargets.Meat = v, v => currentYearScores.Meat = v, v => excesses.Meat = v);
+            CalculateValuesForResource(breakEvenTarget.Chocolate, consumptionTarget.Chocolate, consumptionsProduced.Chocolate, v => nextYearTargets.Chocolate = v, v => currentYearScores.Chocolate = v, v => excesses.Chocolate = v);
+            CalculateValuesForResource(breakEvenTarget.Energy, consumptionTarget.Energy, consumptionsProduced.Energy, v => nextYearTargets.Energy = v, v => currentYearScores.Energy = v, v => excesses.Energy = v);
+            CalculateValuesForResource(breakEvenTarget.Textiles, consumptionTarget.Textiles, consumptionsProduced.Textiles, v => nextYearTargets.Textiles = v, v => currentYearScores.Textiles = v, v => excesses.Textiles = v);
         }
 
-        private void CalculateValuesForResource(int breakEvenResourceValue, int targetValue, int production, Action<int> sentNextTargetValue, Action<int> setScore, Action<int> setExcess)
+        private void CalculateValuesForResource(int breakEvenResourceValue, int targetValue, int consumptionProduced, Action<int> sentNextTargetValue, Action<int> setScore, Action<int> setExcess)
         {
-            var deficit = targetValue - production;
-            var score = production - targetValue;
+            var deficit = targetValue - consumptionProduced;
+            var score = consumptionProduced - targetValue;
 
             setExcess(CalculateExcessForScore(score));
             setScore(score);
