@@ -2,13 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { ScoringModule } from './scoring/scoring.module';
 
 @NgModule({
     declarations: [
         AppComponent
     ],
     imports: [
-        BrowserModule
+        BrowserModule,
+        ScoringModule
     ],
     providers: [],
     bootstrap: [AppComponent]
