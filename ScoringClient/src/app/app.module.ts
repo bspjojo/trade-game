@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ScoringModule } from './scoring/scoring.module';
+import { GameSelectionModule } from './game-selection/game-selection.module';
 
 @NgModule({
     declarations: [
@@ -10,9 +11,9 @@ import { ScoringModule } from './scoring/scoring.module';
     ],
     imports: [
         BrowserModule,
-        ScoringModule
+        ScoringModule,
+        GameSelectionModule
     ],
-    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
