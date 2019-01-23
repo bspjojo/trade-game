@@ -17,7 +17,7 @@ namespace Game.Server.Test.Services
 
             country.Years[0] = new CountryYear
             {
-                Targets = new CountryYearConsumptionResourceValues
+                Targets = new ConsumptionResources
                 {
                     Chocolate = 5,
                     Energy = 5,
@@ -29,7 +29,7 @@ namespace Game.Server.Test.Services
 
             country.Years[1] = new CountryYear();
 
-            var recordedScore = new CountryYearConsumptionResourceValues
+            var recordedScore = new ConsumptionResources
             {
                 Chocolate = 4,
                 Energy = 3,
@@ -60,7 +60,7 @@ namespace Game.Server.Test.Services
 
             country.Years[0] = new CountryYear
             {
-                Targets = new CountryYearConsumptionResourceValues
+                Targets = new ConsumptionResources
                 {
                     Chocolate = 5,
                     Energy = 5,
@@ -72,7 +72,7 @@ namespace Game.Server.Test.Services
 
             country.Years[1] = new CountryYear();
 
-            var recordedScore = new CountryYearConsumptionResourceValues
+            var recordedScore = new ConsumptionResources
             {
                 Chocolate = 4,
                 Energy = 3,
@@ -89,6 +89,49 @@ namespace Game.Server.Test.Services
             Assert.Equal(-1, calcd.Chocolate);
             Assert.Equal(-2, calcd.Energy);
             Assert.Equal(-3, calcd.Grain);
+            Assert.Equal(1, calcd.Meat);
+            Assert.Equal(0, calcd.Textiles);
+        }
+
+        [Fact]
+        public void CalculateYearValues_Should_CalculateExcessesForResources()
+        {
+            var country = new GameCountry
+            {
+                Years = new ConcurrentDictionary<int, CountryYear>()
+            };
+
+            country.Years[0] = new CountryYear
+            {
+                Targets = new ConsumptionResources
+                {
+                    Chocolate = 5,
+                    Energy = 5,
+                    Grain = 5,
+                    Meat = 5,
+                    Textiles = 5
+                }
+            };
+
+            country.Years[1] = new CountryYear();
+
+            var recordedScore = new ConsumptionResources
+            {
+                Chocolate = 4,
+                Energy = 3,
+                Grain = 2,
+                Meat = 6,
+                Textiles = 5
+            };
+
+            var gss = new GameScoreService();
+            gss.CalculateYearValues(0, country, recordedScore);
+
+            var calcd = country.Years[0].Excess;
+
+            Assert.Equal(0, calcd.Chocolate);
+            Assert.Equal(0, calcd.Energy);
+            Assert.Equal(0, calcd.Grain);
             Assert.Equal(1, calcd.Meat);
             Assert.Equal(0, calcd.Textiles);
         }

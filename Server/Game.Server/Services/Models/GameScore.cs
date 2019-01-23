@@ -20,7 +20,16 @@ namespace Game.Server.Services.Models
     public class CountryYear
     {
         public string Id { get; set; }
-        public CountryYearConsumptionResourceValues Targets { get; set; }
-        public CountryYearConsumptionResourceValues Scores { get; set; }
+        public ConsumptionResources Targets { get; set; }
+        public ConsumptionResources Scores { get; set; }
+        public ConsumptionResources Excess { get; set; }
+        public ProductionResources ProductionResources { get; set; }
+    }
+
+    public class ScoreUpdatedBroadcastModel
+    {
+        public string CountryId { get; set; }
+        public int Year { get; set; }
+        public ConsumptionResources Scores { get; set; }
     }
 }

@@ -4,13 +4,12 @@ namespace Game.Server.Services.Models
 {
     public class ScoreServiceResult
     {
-        public CountryYearConsumptionResourceValues NextYearTarget { get; set; }
-        public CountryYearConsumptionResourceValues Excess { get; set; }
+        public ConsumptionResources NextYearTarget { get; set; }
+        public ConsumptionResources Excess { get; set; }
     }
 
-    public class CountryYearConsumptionResourceValues
+    public class ConsumptionResources
     {
-        public string Id { get; set; }
         public int Energy { get; set; }
         public int Chocolate { get; set; }
         public int Meat { get; set; }
@@ -18,9 +17,8 @@ namespace Game.Server.Services.Models
         public int Textiles { get; set; }
     }
 
-    public class CountryYearProductionResources
+    public class ProductionResources
     {
-        public string Id { get; set; }
         public int Oil { get; set; }
         public int Cocoa { get; set; }
         public int Meat { get; set; }
