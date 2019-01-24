@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Game.Server.Services.Models;
 
@@ -8,6 +10,7 @@ namespace Game.Server.Services
     public interface IGameDataService
     {
         Task<GameCountry> GetCountryById(string gameId, string countryId);
+        Task<List<GameSearchResult>> GetListOfGames();
     }
 
     public class InMemoryGameDataService : IGameDataService
@@ -21,6 +24,7 @@ namespace Game.Server.Services
             var game1 = new GameModel
             {
                 Id = "1",
+                Name = "game1",
                 GameCountries = new ConcurrentDictionary<string, GameCountry>()
             };
 
@@ -64,6 +68,13 @@ namespace Game.Server.Services
             }
 
             throw new ArgumentOutOfRangeException(nameof(gameId), gameId, "Unknown game");
+        }
+
+        public Task<List<GameSearchResult>> GetListOfGames()
+        {
+            var countries = _gamesDictionary.Select(v => new GameSearchResult { Id = v.Value.Id, Name = v.Value.Name }).ToList();
+
+            return Task.FromResult(countries);
         }
     }
 }

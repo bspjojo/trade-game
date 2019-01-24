@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Game.Server.Models;
 using Game.Server.Services;
+using Game.Server.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -12,10 +14,12 @@ namespace Game.Server.Controllers
     public class GameController
     {
         private readonly IGameFlowService _gameFlowService;
+        private readonly IGameDataService _gameDataService;
 
-        public GameController(IGameFlowService gameFlowService)
+        public GameController(IGameFlowService gameFlowService, IGameDataService gameDataService)
         {
             _gameFlowService = gameFlowService;
+            _gameDataService = gameDataService;
         }
 
         [HttpPost]
@@ -30,6 +34,12 @@ namespace Game.Server.Controllers
             };
 
             return response;
+        }
+
+        [HttpGet]
+        public Task<List<GameSearchResult>> Games()
+        {
+            return _gameDataService.GetListOfGames();
         }
     }
 }
