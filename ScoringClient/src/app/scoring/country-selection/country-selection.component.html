@@ -1,3 +1,7 @@
-<p>
-    country-selection works!
-</p>
+<select id="country" [formControl]="countrySelectionControl">
+    <option *ngFor="let c of countries" [ngValue]="c">{{ c.name }}</option>
+</select>
+
+<ng-container *ngIf="countrySelectionControl.value != null">
+    <p>Selected country: {{countrySelectionControl.value.name}}</p>
+</ng-container>

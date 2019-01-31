@@ -5,10 +5,14 @@ import { ResultEntryComponent } from './result-entry/result-entry.component';
 import { ExcessDisplayComponent } from './excess-display/excess-display.component';
 import { CountrySelectionComponent } from './country-selection/country-selection.component';
 import { NextYearTargetDisplayComponent } from './next-year-target-display/next-year-target-display.component';
+import { ScoringComponentService } from './scoring-component.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         ScoringComponent,
@@ -19,6 +23,9 @@ import { NextYearTargetDisplayComponent } from './next-year-target-display/next-
     ],
     exports: [
         ScoringComponent
+    ],
+    providers: [
+        ScoringComponentService
     ]
 })
 export class ScoringModule { }
