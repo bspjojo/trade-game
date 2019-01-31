@@ -14,11 +14,11 @@ export class GameSelectionService {
         return this.httpClient.get<GameSelection[]>(this.configService.config.apiUrl + 'api/game/games').toPromise();
     }
 
-    public setGame(selectedGame: GameSelection): void {
+    public set game(selectedGame: GameSelection) {
         this.selectedGame = selectedGame;
     }
 
-    public getGame(): GameSelection {
+    public get game(): GameSelection {
         return this.selectedGame;
     }
 }

@@ -21,9 +21,9 @@ export class GameSelectionComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.gameSelectionControl = new FormControl(this.gameSelectionService.getGame());
+        this.gameSelectionControl = new FormControl(this.gameSelectionService.game);
         this.gameSelectionControl.valueChanges.takeUntil(this.ngUnsubscribe).subscribe(selectedGame => {
-            this.gameSelectionService.setGame(selectedGame);
+            this.gameSelectionService.game = selectedGame;
         });
         this.games = [];
         this.games = await this.gameSelectionService.getCountries();

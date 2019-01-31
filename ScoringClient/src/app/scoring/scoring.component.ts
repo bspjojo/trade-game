@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameSelectionService } from '../game-selection/game-selection.service';
 
 @Component({
     selector: 'score-scoring',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScoringComponent implements OnInit {
 
-    constructor() { }
+    constructor(private gameSelectionService: GameSelectionService) { }
 
     public ngOnInit(): void {
     }
 
+    public get show(): boolean {
+        return this.gameSelectionService.game != null;
+    }
 }
