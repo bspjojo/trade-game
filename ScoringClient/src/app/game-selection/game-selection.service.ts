@@ -10,7 +10,7 @@ export class GameSelectionService {
 
     constructor(private configService: ConfigService, private httpClient: HttpClient) { }
 
-    public getCountries(): Promise<GameSelection[]> {
+    public getGames(): Promise<GameSelection[]> {
         return this.httpClient.get<GameSelection[]>(this.configService.config.apiUrl + 'api/game/games').toPromise();
     }
 

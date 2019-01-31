@@ -1,5 +1,5 @@
-<select id="country" [formControl]="gameSelectionControl">
-    <option *ngFor="let c of games" [ngValue]="c">{{ c.name }}</option>
+<select id="game" [formControl]="gameSelectionControl">
+    <option *ngFor="let g of games" [ngValue]="g">{{ g.name }}</option>
 </select>
 
 <ng-container *ngIf="gameSelectionControl.value != null">

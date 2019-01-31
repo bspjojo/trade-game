@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { GameSelectionService } from './game-selection.service';
@@ -10,7 +10,7 @@ import { Subject } from 'rxjs/Subject';
     templateUrl: './game-selection.component.html',
     styleUrls: ['./game-selection.component.less']
 })
-export class GameSelectionComponent implements OnInit {
+export class GameSelectionComponent implements OnInit, OnDestroy {
     public games: GameSelection[];
     public gameSelectionControl: FormControl;
 
@@ -26,6 +26,11 @@ export class GameSelectionComponent implements OnInit {
             this.gameSelectionService.game = selectedGame;
         });
         this.games = [];
-        this.games = await this.gameSelectionService.getCountries();
+        this.games = await this.gameSelectionService.getGames();
+    }
+
+    public ngOnDestroy(): void {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
     }
 }
