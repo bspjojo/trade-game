@@ -41,5 +41,12 @@ namespace Game.Server.Controllers
         {
             return _gameDataService.GetListOfGames();
         }
+
+        [HttpGet]
+        [Route("{gameId}")]
+        public Task<List<CountrySearchResult>> Countries(string gameId)
+        {
+            return _gameDataService.GetListOfCountriesInGame(gameId);
+        }
     }
 }

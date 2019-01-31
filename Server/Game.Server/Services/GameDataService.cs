@@ -11,6 +11,7 @@ namespace Game.Server.Services
     {
         Task<GameCountry> GetCountryById(string gameId, string countryId);
         Task<List<GameSearchResult>> GetListOfGames();
+        Task<List<CountrySearchResult>> GetListOfCountriesInGame(string gameId);
     }
 
     public class InMemoryGameDataService : IGameDataService
@@ -72,7 +73,16 @@ namespace Game.Server.Services
 
         public Task<List<GameSearchResult>> GetListOfGames()
         {
-            var countries = _gamesDictionary.Select(v => new GameSearchResult { Id = v.Value.Id, Name = v.Value.Name }).ToList();
+            var games = _gamesDictionary.Select(v => new GameSearchResult { Id = v.Value.Id, Name = v.Value.Name }).ToList();
+
+            return Task.FromResult(games);
+        }
+
+        public Task<List<CountrySearchResult>> GetListOfCountriesInGame(string gameId)
+        {
+            var game = _gamesDictionary[gameId];
+
+            var countries = game.GameCountries.Select(v => new CountrySearchResult { Id = v.Value.Id, Name = v.Value.Name }).ToList();
 
             return Task.FromResult(countries);
         }

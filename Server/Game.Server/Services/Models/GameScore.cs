@@ -8,6 +8,12 @@ namespace Game.Server.Services.Models
         public string Id { get; set; }
         public string Name { get; set; }
     }
+    
+    public class CountrySearchResult
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
 
     public class GameModel
     {
