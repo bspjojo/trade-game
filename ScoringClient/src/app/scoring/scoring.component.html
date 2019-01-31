@@ -1,6 +1,9 @@
 <ng-container *ngIf="show">
     <score-country-selection (country)="countrySelected($event)"></score-country-selection>
-    <score-result-entry></score-result-entry>
-    <score-excess-display></score-excess-display>
-    <score-next-year-target-display></score-next-year-target-display>
+
+    <ng-container *ngIf="showResultEntry">
+        <score-result-entry></score-result-entry>
+        <score-excess-display></score-excess-display>
+        <score-next-year-target-display></score-next-year-target-display>
+    </ng-container>
 </ng-container>
