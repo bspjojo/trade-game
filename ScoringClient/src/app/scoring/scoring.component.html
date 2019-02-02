@@ -5,8 +5,8 @@
         <score-result-entry [resetFormSubject]="resetFormSubject" (resultResponse)="resultUpdated($event)"></score-result-entry>
 
         <ng-container *ngIf="apiResponseNotNull">
-            <score-consumption-resources-display heading="Excess" [consumptionObject]="apiResponse.excess"></score-consumption-resources-display>
-            <score-consumption-resources-display heading="Targets" [consumptionObject]="apiResponse.nextYearTarget"></score-consumption-resources-display>
+            <score-consumption-resources-display [initialShow]="true" heading="Excess" [consumptionObject]="apiResponse.excess"></score-consumption-resources-display>
+            <score-consumption-resources-display [initialShow]="false" heading="Targets" [consumptionObject]="apiResponse.nextYearTarget"></score-consumption-resources-display>
         </ng-container>
     </ng-container>
 </ng-container>

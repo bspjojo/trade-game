@@ -1,5 +1,5 @@
-<p>{{heading}}</p>
-<table>
+<p (click)="show=!show">{{heading}} <span *ngIf="show">^</span><span *ngIf="!show">v</span></p>
+<table *ngIf="show">
     <thead>
         <th>Resource name</th>
         <th>Number</th>

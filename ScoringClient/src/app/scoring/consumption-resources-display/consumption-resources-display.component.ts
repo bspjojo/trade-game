@@ -9,9 +9,10 @@ export class ConsumptionResourcesDisplayComponent implements OnInit {
     @Input() public heading: string;
     @Input() public consumptionObject: any;
 
-    constructor() { }
+    @Input() public initialShow: boolean;
+    public show: boolean;
 
     public ngOnInit(): void {
+        this.show = this.initialShow;
     }
-
 }

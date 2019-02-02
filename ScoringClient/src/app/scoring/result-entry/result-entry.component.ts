@@ -76,6 +76,8 @@ export class ResultEntryComponent implements OnInit, OnDestroy {
     }
 
     public async updateScores(): Promise<void> {
+        this.resultResponse.emit(null);
+
         let requestObj = {
             Energy: this.energyFormControl.value,
             Chocolate: this.chocolateFormControl.value,
