@@ -2,7 +2,7 @@
     <score-country-selection (country)="countrySelected($event)"></score-country-selection>
 
     <ng-container *ngIf="showResultEntry">
-        <score-result-entry (resultResponse)="resultUpdated($event)"></score-result-entry>
+        <score-result-entry [resetFormSubject]="resetFormSubject" (resultResponse)="resultUpdated($event)"></score-result-entry>
 
         <ng-container *ngIf="apiResponseNotNull">
             <score-consumption-resources-display heading="Excess" [consumptionObject]="apiResponse.excess"></score-consumption-resources-display>

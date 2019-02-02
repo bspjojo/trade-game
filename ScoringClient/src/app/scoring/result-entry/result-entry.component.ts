@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 import { ScoringComponentService } from '../scoring-component.service';
@@ -12,6 +12,7 @@ export class ResultEntryComponent implements OnInit, OnDestroy {
     public forms: { name: string, form: FormControl }[];
     public validationGroup: FormGroup;
     @Output() public resultResponse: EventEmitter<any>;
+    @Input() public resetFormSubject: Subject<void>;
 
     private energyFormControl: FormControl;
     private chocolateFormControl: FormControl;
@@ -63,6 +64,10 @@ export class ResultEntryComponent implements OnInit, OnDestroy {
 
             this.validationGroup.setControl(form.name, form.form);
         }
+
+        this.resetFormSubject.takeUntil(this.ngUnsubscribe).subscribe(() => {
+            this.validationGroup.reset();
+        });
     }
 
     public ngOnDestroy(): void {
