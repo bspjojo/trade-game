@@ -2,8 +2,11 @@
     <score-country-selection (country)="countrySelected($event)"></score-country-selection>
 
     <ng-container *ngIf="showResultEntry">
-        <score-result-entry></score-result-entry>
-        <score-excess-display></score-excess-display>
-        <score-next-year-target-display></score-next-year-target-display>
+        <score-result-entry (resultResponse)="resultUpdated($event)"></score-result-entry>
+
+        <ng-container *ngIf="apiResponseNotNull">
+            <score-consumption-resources-display heading="Excess" [consumptionObject]="apiResponse.excess"></score-consumption-resources-display>
+            <score-consumption-resources-display heading="Targets" [consumptionObject]="apiResponse.nextYearTarget"></score-consumption-resources-display>
+        </ng-container>
     </ng-container>
 </ng-container>
