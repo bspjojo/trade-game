@@ -31,14 +31,20 @@ namespace Game.Server.Services
 
             _gamesDictionary.TryAdd("1", game1);
 
-            var country1 = new GameCountry
+            AddCountry(game1, "1");
+            AddCountry(game1, "2");
+        }
+
+        private void AddCountry(GameModel gm, string id)
+        {
+            var country = new GameCountry
             {
-                Id = "1",
-                Name = "country1",
+                Id = id,
+                Name = "country" + id,
                 Years = new ConcurrentDictionary<int, CountryYear>()
             };
 
-            game1.GameCountries.TryAdd("1", country1);
+            gm.GameCountries.TryAdd(id, country);
 
             var year0 = new CountryYear
             {
@@ -53,7 +59,7 @@ namespace Game.Server.Services
                 }
             };
 
-            country1.Years.TryAdd(0, year0);
+            country.Years.TryAdd(0, year0);
         }
 
         public Task<GameCountry> GetCountryById(string gameId, string countryId)
