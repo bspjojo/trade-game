@@ -97,6 +97,10 @@
             true,
             "allow-null-check"
         ],
+        "typedef": [
+            true,
+            "call-signature"
+        ],
         "typedef-whitespace": [
             true,
             {
@@ -126,7 +130,7 @@
         "component-selector": [
             true,
             "element",
-            "app",
+            "score",
             "kebab-case"
         ],
         "no-output-on-prefix": true,

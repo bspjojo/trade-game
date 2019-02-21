@@ -3,9 +3,22 @@ using System.Collections.Concurrent;
 
 namespace Game.Server.Services.Models
 {
+    public class GameSearchResult
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+    
+    public class CountrySearchResult
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
     public class GameModel
     {
         public string Id { get; set; }
+        public string Name { get; set; }
         public DateTime GameDate { get; set; }
         public ConcurrentDictionary<string, GameCountry> GameCountries { get; set; }
     }

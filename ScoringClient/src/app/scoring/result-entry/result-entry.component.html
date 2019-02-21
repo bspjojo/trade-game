@@ -1,0 +1,14 @@
+<table>
+    <thead>
+        <th>Resource name</th>
+        <th>Number</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let form of forms">
+            <td>{{form.name}}</td>
+            <td><input type="number" [formControl]="form.form"></td>
+        </tr>
+    </tbody>
+</table>
+
+<button *ngIf="validationGroup.valid" (click)="updateScores()">Update</button>
