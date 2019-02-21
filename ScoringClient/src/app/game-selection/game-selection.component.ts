@@ -25,6 +25,7 @@ export class GameSelectionComponent implements OnInit, OnDestroy {
         this.gameSelectionControl.valueChanges.takeUntil(this.ngUnsubscribe).subscribe(selectedGame => {
             this.gameSelectionService.game = selectedGame;
         });
+
         this.games = [];
         this.games = await this.gameSelectionService.getGames();
     }
