@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GameSelectionService } from '../game-selection/game-selection.service';
 import { CountrySelection } from './country-selection/country-selection.model';
 import { ScoringComponentService } from './scoring-component.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'score-scoring',

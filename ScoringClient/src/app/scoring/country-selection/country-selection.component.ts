@@ -1,7 +1,9 @@
+
+import {takeUntil} from 'rxjs/operators';
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ScoringComponentService } from '../scoring-component.service';
 import { FormControl } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { GameSelectionService } from '../../game-selection/game-selection.service';
 import { CountrySelection } from './country-selection.model';
 
@@ -24,7 +26,7 @@ export class CountrySelectionComponent implements OnInit, OnDestroy {
 
     public async ngOnInit(): Promise<void> {
         this.countrySelectionControl = new FormControl();
-        this.countrySelectionControl.valueChanges.takeUntil(this.ngUnsubscribe).subscribe(selectedCountry => {
+        this.countrySelectionControl.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(selectedCountry => {
             this.country.emit(selectedCountry);
         });
 

@@ -1,9 +1,10 @@
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { GameSelectionService } from './game-selection.service';
 import { GameSelection } from './game-selection.model';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'score-game-selection',
@@ -22,7 +23,7 @@ export class GameSelectionComponent implements OnInit, OnDestroy {
 
     public async ngOnInit(): Promise<void> {
         this.gameSelectionControl = new FormControl(this.gameSelectionService.game);
-        this.gameSelectionControl.valueChanges.takeUntil(this.ngUnsubscribe).subscribe(selectedGame => {
+        this.gameSelectionControl.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(selectedGame => {
             this.gameSelectionService.game = selectedGame;
         });
 

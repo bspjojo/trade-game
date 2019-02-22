@@ -1,6 +1,8 @@
+
+import {takeUntil} from 'rxjs/operators';
 import { Component, OnInit, OnDestroy, EventEmitter, Output, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ScoringComponentService } from '../scoring-component.service';
 
 @Component({
@@ -65,7 +67,7 @@ export class ResultEntryComponent implements OnInit, OnDestroy {
             this.validationGroup.setControl(form.name, form.form);
         }
 
-        this.resetFormSubject.takeUntil(this.ngUnsubscribe).subscribe(() => {
+        this.resetFormSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
             this.validationGroup.reset();
         });
     }
