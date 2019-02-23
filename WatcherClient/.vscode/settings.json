@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/node_modules": true,
+        "**/CVS": true,
+        "**/.DS_Store": true
+    },
+    "editor.detectIndentation": false,
+    "editor.formatOnSave": true
+}
