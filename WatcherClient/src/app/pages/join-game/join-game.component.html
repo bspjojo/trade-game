@@ -1,3 +1,7 @@
-<p>
-  join-game works!
-</p>
+<select id="game" [formControl]="gameSelectionControl">
+    <option *ngFor="let g of games" [ngValue]="g">{{ g.name }}</option>
+</select>
+
+<ng-container *ngIf="gameSelectionControl.value != null">
+    <p>Selected game: {{gameSelectionControl.value.name}}</p>
+</ng-container>
