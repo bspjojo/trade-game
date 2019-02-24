@@ -5,6 +5,7 @@ import { AppConfigModule } from '../../app-config/app-config.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JoinGameComponent } from './join-game.component';
+import { GameServicesModule } from 'src/app/game-services/game-services.module';
 
 @NgModule({
     imports: [
@@ -12,7 +13,8 @@ import { JoinGameComponent } from './join-game.component';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        AppConfigModule
+        AppConfigModule,
+        GameServicesModule
     ],
     declarations: [JoinGameComponent],
     exports: [JoinGameComponent],
