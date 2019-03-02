@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -27,9 +28,36 @@ namespace Game.Server.DataRepositories
             throw new System.NotImplementedException();
         }
 
-        public Task<List<CountrySearchResult>> GetListOfCountriesInGame(string gameId)
+        public async Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId)
         {
-            throw new System.NotImplementedException();
+            _logger.LogInformation("Getting active games.");
+
+            var selectCountriesInGame = @"SELECT GameCountries.ID
+                                        , ScenarioCountries.Name
+                                        FROM dbo.Game_Countries [GameCountries]
+                                            JOIN dbo.Scenario_Countries [ScenarioCountries] ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
+                                        WHERE GameID = @GameId";
+
+            IEnumerable<GameCountryDAO> results = null;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+
+                connection.Open();
+                results = await connection.QueryAsync<GameCountryDAO>(selectCountriesInGame, new
+                {
+                    GameId = gameId
+                });
+                connection.Close();
+            }
+
+            _logger.LogInformation($"Found {results.Count()} active games.");
+
+            return results.Select(item => new CountrySearchResult
+            {
+                Id = item.Id,
+                Name = item.Name
+            });
         }
 
         public async Task<IEnumerable<GameSearchResult>> GetListOfActiveGames()
@@ -37,10 +65,10 @@ namespace Game.Server.DataRepositories
             _logger.LogInformation("Getting active games.");
 
             var selectActiveGamesQuery = @"SELECT ID
-                                    , [Name]
-                                    , [DateStarted]
-                                    FROM dbo.Games
-                                    WHERE Active = 1";
+                                        , [Name]
+                                        , [DateStarted]
+                                        FROM dbo.Games
+                                        WHERE Active = 1";
 
             IEnumerable<GameSearchDAO> results = null;
 
@@ -60,7 +88,6 @@ namespace Game.Server.DataRepositories
                 Name = item.Name,
                 DateStarted = item.DateStarted
             });
-
         }
     }
 }

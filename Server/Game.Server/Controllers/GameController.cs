@@ -45,7 +45,7 @@ namespace Game.Server.Controllers
 
         [HttpGet]
         [Route("{gameId}")]
-        public Task<List<CountrySearchResult>> Countries(string gameId)
+        public Task<IEnumerable<CountrySearchResult>> Countries(Guid gameId)
         {
             return _gameDataService.GetListOfCountriesInGame(gameId);
         }

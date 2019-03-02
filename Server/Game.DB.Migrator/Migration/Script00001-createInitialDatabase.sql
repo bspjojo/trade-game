@@ -15,6 +15,7 @@ CREATE TABLE dbo.Scenario_Countries
     ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
     ScenarioID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES dbo.Scenarios(ID),
     [Name] VARCHAR(100),
+    TargetScore INT
 )
 
 CREATE TABLE dbo.BaseLine_Scenario_Country_Produce
@@ -25,7 +26,7 @@ CREATE TABLE dbo.BaseLine_Scenario_Country_Produce
     Meat INT,
     Oil INT,
     Cocoa INT,
-    Cotton int
+    Cotton INT
 )
 
 CREATE TABLE dbo.BaseLine_Scenario_Country_Targets
@@ -36,7 +37,7 @@ CREATE TABLE dbo.BaseLine_Scenario_Country_Targets
     Meat INT,
     Energy INT,
     Chocolate INT,
-    Textiles int
+    Textiles INT
 )
 
 -- Game
@@ -66,7 +67,7 @@ CREATE TABLE dbo.Game_Country_Year_Recorded
     Meat INT,
     Energy INT,
     Chocolate INT,
-    Textiles int
+    Textiles INT
 )
 
 CREATE TABLE dbo.Game_Country_Year_Score
@@ -78,7 +79,7 @@ CREATE TABLE dbo.Game_Country_Year_Score
     Meat INT,
     Energy INT,
     Chocolate INT,
-    Textiles int
+    Textiles INT
 )
 
 CREATE TABLE dbo.Game_Country_Year_Excess
@@ -90,7 +91,7 @@ CREATE TABLE dbo.Game_Country_Year_Excess
     Meat INT,
     Energy INT,
     Chocolate INT,
-    Textiles int
+    Textiles INT
 )
 
 CREATE TABLE dbo.Game_Country_Year_Targets
@@ -102,7 +103,7 @@ CREATE TABLE dbo.Game_Country_Year_Targets
     Meat INT,
     Energy INT,
     Chocolate INT,
-    Textiles int
+    Textiles INT
 )
 
 CREATE TABLE dbo.Game_Country_Year_Growth_Certificates_Purchased
@@ -114,7 +115,7 @@ CREATE TABLE dbo.Game_Country_Year_Growth_Certificates_Purchased
     Meat INT,
     Oil INT,
     Cocoa INT,
-    Cotton int
+    Cotton INT
 )
 
 COMMIT TRAN

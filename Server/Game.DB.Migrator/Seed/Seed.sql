@@ -16,9 +16,9 @@ DECLARE @ScenarioId UNIQUEIDENTIFIER = (SELECT TOP 1
 from dbo.Scenarios)
 
 INSERT INTO dbo.Scenario_Countries
-    (ScenarioID, Name)
+    (ScenarioID, Name, TargetScore)
 values
-    (@ScenarioId, 'SeedCountry1')
+    (@ScenarioId, 'SeedCountry1', 40)
 
 -- select *
 -- from dbo.Scenario_Countries

@@ -1,6 +1,7 @@
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Game.Server.Models.DataAccessModels;
 using Game.Server.Services.Models;
 
 namespace Game.Server.DataRepositories
@@ -9,6 +10,6 @@ namespace Game.Server.DataRepositories
     {
         Task<GameCountry> GetCountryById(string countryId);
         Task<IEnumerable<GameSearchResult>> GetListOfActiveGames();
-        Task<List<CountrySearchResult>> GetListOfCountriesInGame(string gameId);
+        Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId);
     }
 }
