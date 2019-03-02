@@ -46,7 +46,8 @@ CREATE TABLE dbo.Games
     ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
     ScenarioID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES dbo.Scenarios(ID),
     [Name] VARCHAR(100),
-    [DateStarted] DATE
+    [DateStarted] DATE,
+    [Active] BIT
 )
 
 CREATE TABLE dbo.Game_Countries

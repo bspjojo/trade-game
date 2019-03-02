@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Game.Server.Configuration;
 using Game.Server.Hubs;
 using Game.Server.Services;
+using Game.Server.DataRepositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Game.Server.Models;
 
 namespace Game.Server
 {
@@ -28,12 +30,13 @@ namespace Game.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IGameDataService, InMemoryGameDataService>();
+            services.AddSingleton<IGameDataService, SqlGameDataService>();
             services.AddSingleton<IGameFlowService, GameFlowService>();
             services.AddSingleton<IGameScoreService, GameScoreService>();
             services.AddSingleton<IGameHubService, GameHubService>();
 
             var corsConfig = Configuration.GetSection("Cors").Get<CorsConfig>();
+            services.Configure<GameConnection>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddCors(o =>
                 o.AddPolicy("All",

@@ -5,10 +5,11 @@ namespace Game.Server.Services.Models
 {
     public class GameSearchResult
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+        public DateTime DateStarted { get; set; }
         public string Name { get; set; }
     }
-    
+
     public class CountrySearchResult
     {
         public string Id { get; set; }

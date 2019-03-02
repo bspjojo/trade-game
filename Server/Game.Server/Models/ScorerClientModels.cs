@@ -5,7 +5,6 @@ namespace Game.Server.Models
     // Upload
     public class ScorerClientScoreUpdate
     {
-        public string GameId { get; set; }
         public string CountryId { get; set; }
         public int Year { get; set; }
         public ConsumptionResources YearResults { get; set; }

@@ -41,9 +41,9 @@ values(@ScenarioCountryId, 3, 4, 5, 6, 7)
 -- from dbo.BaseLine_Scenario_Country_Produce
 
 insert into dbo.Games
-    (ScenarioID, Name, DateStarted)
+    (ScenarioID, Name, DateStarted, Active)
 values
-    (@ScenarioId, 'Seed game 1', '2018-10-11')
+    (@ScenarioId, 'Seed game 1', '2018-10-11', 1)
 
 -- select *
 -- from dbo.Games
