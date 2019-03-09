@@ -16,12 +16,11 @@ namespace Game.Server.Services.Models
         public string Name { get; set; }
     }
 
-    public class GameModel
+    public class GameInformationResult
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public DateTime GameDate { get; set; }
-        public ConcurrentDictionary<string, GameCountry> GameCountries { get; set; }
+        public int CurrentYear { get; set; }
     }
 
     public class GameCountry

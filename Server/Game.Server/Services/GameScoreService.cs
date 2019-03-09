@@ -5,18 +5,18 @@ namespace Game.Server.Services
 {
     public interface IGameScoreService
     {
-        void CalculateYearValues(ConsumptionResources breakEven, ConsumptionResources currentYearTargets, ConsumptionResources consumptionRecorded, out ConsumptionResources currentYearExcess, out ConsumptionResources currentYearScores, out ConsumptionResources nextYearTargets);
+        void CalculateYearValues(ConsumptionResources breakEven, ConsumptionResources currentYearTargets, ConsumptionResources consumptionResourcesRecorded, out ConsumptionResources currentYearExcess, out ConsumptionResources currentYearScores, out ConsumptionResources nextYearTargets);
     }
 
     public class GameScoreService : IGameScoreService
     {
-        public void CalculateYearValues(ConsumptionResources breakEven, ConsumptionResources currentYearTargets, ConsumptionResources consumptionRecorded, out ConsumptionResources currentYearExcess, out ConsumptionResources currentYearScores, out ConsumptionResources nextYearTargets)
+        public void CalculateYearValues(ConsumptionResources breakEven, ConsumptionResources currentYearTargets, ConsumptionResources consumptionResourcesRecorded, out ConsumptionResources currentYearExcess, out ConsumptionResources currentYearScores, out ConsumptionResources nextYearTargets)
         {
             nextYearTargets = new ConsumptionResources();
             currentYearScores = new ConsumptionResources();
             currentYearExcess = new ConsumptionResources();
 
-            CalculateScoresAndTargetsForCountryYearResources(breakEven, currentYearTargets, consumptionRecorded, nextYearTargets, currentYearScores, currentYearExcess);
+            CalculateScoresAndTargetsForCountryYearResources(breakEven, currentYearTargets, consumptionResourcesRecorded, nextYearTargets, currentYearScores, currentYearExcess);
         }
 
         private void CalculateScoresAndTargetsForCountryYearResources(

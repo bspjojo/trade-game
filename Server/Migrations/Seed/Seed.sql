@@ -41,9 +41,9 @@ values(@ScenarioCountryId, 3, 4, 5, 6, 7)
 -- from dbo.BaseLine_Scenario_Country_Produce
 
 insert into dbo.Games
-    (ScenarioID, Name, DateStarted, Active)
+    (ScenarioID, Name, DateStarted, Active, CurrentYear)
 values
-    (@ScenarioId, 'Seed game 1', '2018-10-11', 1)
+    (@ScenarioId, 'Seed game 1', '2018-10-11', 1, 1)
 
 -- select *
 -- from dbo.Games
@@ -57,5 +57,14 @@ insert into dbo.Game_Countries
 VALUES
     (@GameId, @ScenarioCountryId)
 
-select *
-from dbo.Game_Countries
+declare @GameCountryID UNIQUEIDENTIFIER =( SELECT top 1
+    Id
+from dbo.Game_Countries)
+
+-- select *
+-- from dbo.Game_Countries
+
+INSERT INTO Game_Country_Year_Targets
+    (GameCountryID, Year, Grain, Meat, Energy, Chocolate, Textiles)
+VALUES
+    ( @GameCountryID, 1, 3, 4, 5, 6, 7)

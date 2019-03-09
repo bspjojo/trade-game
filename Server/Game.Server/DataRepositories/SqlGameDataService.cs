@@ -23,11 +23,6 @@ namespace Game.Server.DataRepositories
             _connectionString = gameConnectionInformation.Value.GameDb;
         }
 
-        public Task<GameCountry> GetCountryById(string countryId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId)
         {
             _logger.LogInformation("Getting active games.");
@@ -42,7 +37,6 @@ namespace Game.Server.DataRepositories
 
             using (var connection = new SqlConnection(_connectionString))
             {
-
                 connection.Open();
                 results = await connection.QueryAsync<GameCountryDAO>(selectCountriesInGame, new
                 {
@@ -74,7 +68,6 @@ namespace Game.Server.DataRepositories
 
             using (var connection = new SqlConnection(_connectionString))
             {
-
                 connection.Open();
                 results = await connection.QueryAsync<GameSearchDAO>(selectActiveGamesQuery);
                 connection.Close();
@@ -88,6 +81,77 @@ namespace Game.Server.DataRepositories
                 Name = item.Name,
                 DateStarted = item.DateStarted
             });
+        }
+
+        public async Task<ConsumptionResources> GetBreakEvenForACountry(string countryId)
+        {
+            _logger.LogInformation("Getting break even for country with id games.");
+
+            var selectBreakEvenForACountryQuery = @"SELECT BreakEven.Chocolate
+                                            , BreakEven.Energy
+                                            , BreakEven.Grain
+                                            , BreakEven.Meat
+                                            , BreakEven.Textiles
+                                        FROM dbo.BaseLine_Scenario_Country_Targets as BreakEven
+                                            JOIN dbo.Scenario_Countries AS ScenarioCountries
+                                            ON ScenarioCountries.ID = BreakEven.ScenarioCountryID
+                                            JOIN dbo.Game_Countries AS GameCountries
+                                            ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
+                                        WHERE GameCountries.ID = @CountryId";
+
+            ConsumptionResourceDAO result = null;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                result = await connection.QueryFirstAsync<ConsumptionResourceDAO>(selectBreakEvenForACountryQuery, new
+                {
+                    CountryId = countryId
+                });
+                connection.Close();
+            }
+
+            return new ConsumptionResources
+            {
+                Meat = result.Meat,
+                Chocolate = result.Chocolate,
+                Textiles = result.Textiles,
+                Energy = result.Energy,
+                Grain = result.Grain
+            };
+        }
+
+        public Task<ConsumptionResources> GetTargetsForACountryForAYear(string countryId, int year)
+        {
+            //ConsumptionResourceDAO
+            throw new NotImplementedException();
+        }
+
+        public async Task<GameInformationResult> GetGameInformationForACountry(string countryId)
+        {
+            var gameInformationQuery = @"SELECT dbo.Games.ID
+                                            , dbo.Games.CurrentYear
+                                        FROM dbo.Games JOIN dbo.Game_Countries ON dbo.Games.ID = dbo.Game_Countries.GameID
+                                        WHERE dbo.Game_Countries.ID = @CountryId";
+
+            GameInformationDAO result = null;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                result = await connection.QueryFirstAsync<GameInformationDAO>(gameInformationQuery, new
+                {
+                    CountryId = countryId
+                });
+                connection.Close();
+            }
+
+            return new GameInformationResult
+            {
+                Name = result.Name,
+                CurrentYear = result.CurrentYear,
+                Id = result.Id
+            };
         }
     }
 }

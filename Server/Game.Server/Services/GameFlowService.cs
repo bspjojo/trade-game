@@ -7,7 +7,7 @@ namespace Game.Server.Services
 {
     public interface IGameFlowService
     {
-        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, int year, ConsumptionResources productionRecorded);
+        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, int year, ConsumptionResources consumptionResourcesRecorded);
     }
 
     public class GameFlowService : IGameFlowService
@@ -23,24 +23,25 @@ namespace Game.Server.Services
             _gameScoreService = gameScoreService;
         }
 
-        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, int year, ConsumptionResources productionRecorded)
+        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, int year, ConsumptionResources consumptionResourcesRecorded)
         {
-            var country = await _gameDataService.GetCountryById(countryId);
+            var gameInformation = await _gameDataService.GetGameInformationForACountry(countryId);
 
-            // do max year stuff
-            country.Years[year + 1] = new CountryYear();
+            var breakEven = await _gameDataService.GetBreakEvenForACountry(countryId);
+            var targetsForCurrentYear = await _gameDataService.GetTargetsForACountryForAYear(countryId, gameInformation.CurrentYear);
 
-            _gameScoreService.CalculateYearValues(year, country, productionRecorded);
+            _gameScoreService.CalculateYearValues(breakEven, targetsForCurrentYear, consumptionResourcesRecorded, out var currentYearExcess, out var currentYearScores, out var nextYearTargets);
 
-            var scores = country.Years[year].Scores;
-            var excess = country.Years[year].Excess;
+            // var scores = country.Years[year].Scores;
+            // var excess = country.Years[year].Excess;
 
-            // await _gameHubService.ScoresUpdated(gameId, countryId, year, scores);
+            //await _gameHubService.ScoresUpdated(gameId, c)
 
             return new ScoreServiceResult
             {
-                NextYearTarget = country.Years[year + 1].Targets,
-                Excess = excess
+                NextYearTarget = nextYearTargets,
+                Excess = currentYearExcess,
+                Scores = currentYearScores
             };
         }
     }

@@ -6,6 +6,7 @@ namespace Game.Server.Services.Models
     {
         public ConsumptionResources NextYearTarget { get; set; }
         public ConsumptionResources Excess { get; set; }
+        public ConsumptionResources Scores { get; set; }
     }
 
     public class ConsumptionResources

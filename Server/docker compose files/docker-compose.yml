@@ -8,3 +8,4 @@ services:
             ACCEPT_EULA: "Y"
         ports:
             - "9001:1433"
+        restart: always
