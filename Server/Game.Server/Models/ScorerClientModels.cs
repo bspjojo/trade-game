@@ -15,5 +15,6 @@ namespace Game.Server.Models
     {
         public ConsumptionResources NextYearTarget { get; set; }
         public ConsumptionResources Excess { get; set; }
+        public ConsumptionResources Scores { get; internal set; }
     }
 }

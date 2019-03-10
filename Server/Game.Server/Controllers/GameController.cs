@@ -31,7 +31,8 @@ namespace Game.Server.Controllers
             var response = new ScorerClientScoreUpdateResponse
             {
                 NextYearTarget = scoreUpdateResult.NextYearTarget,
-                Excess = scoreUpdateResult.Excess
+                Excess = scoreUpdateResult.Excess,
+                Scores = scoreUpdateResult.Scores
             };
 
             return response;
