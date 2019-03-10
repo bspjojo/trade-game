@@ -7,7 +7,7 @@ namespace Game.Server.Services
 {
     public interface IGameFlowService
     {
-        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, int year, ConsumptionResources consumptionResourcesRecorded);
+        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, ConsumptionResources consumptionResourcesRecorded);
     }
 
     public class GameFlowService : IGameFlowService
@@ -23,7 +23,7 @@ namespace Game.Server.Services
             _gameScoreService = gameScoreService;
         }
 
-        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, int year, ConsumptionResources consumptionResourcesRecorded)
+        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, ConsumptionResources consumptionResourcesRecorded)
         {
             var gameInformation = await _gameDataService.GetGameInformationForACountry(countryId);
 
@@ -36,7 +36,7 @@ namespace Game.Server.Services
             await _gameDataService.SetCountryYearScores(countryId, gameInformation.CurrentYear, currentYearScores);
             await _gameDataService.SetCountryYearTargets(countryId, gameInformation.CurrentYear + 1, nextYearTargets);
 
-            //await _gameHubService.ScoresUpdated(gameId, c)
+            await _gameHubService.ScoresUpdated(gameInformation.Id.ToString(), countryId, gameInformation.CurrentYear, currentYearScores);
 
             return new ScoreServiceResult
             {

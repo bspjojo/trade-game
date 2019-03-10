@@ -26,7 +26,7 @@ namespace Game.Server.Controllers
         [HttpPost]
         public async Task<ScorerClientScoreUpdateResponse> UpdateScores([FromBody] ScorerClientScoreUpdate roundResults)
         {
-            var scoreUpdateResult = await _gameFlowService.ExecuteUpdateScoreFlow(roundResults.CountryId, roundResults.Year, roundResults.YearResults);
+            var scoreUpdateResult = await _gameFlowService.ExecuteUpdateScoreFlow(roundResults.CountryId, roundResults.YearResults);
 
             var response = new ScorerClientScoreUpdateResponse
             {

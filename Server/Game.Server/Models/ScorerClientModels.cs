@@ -6,7 +6,6 @@ namespace Game.Server.Models
     public class ScorerClientScoreUpdate
     {
         public string CountryId { get; set; }
-        public int Year { get; set; }
         public ConsumptionResources YearResults { get; set; }
         //public CountryYearProductionResources GrowthCertificatesPurchased { get; set; }
     }
