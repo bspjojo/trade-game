@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Game.Server.Controllers;
 using Game.Server.DataRepositories;
@@ -16,6 +18,8 @@ namespace Game.Server.Test.Controllers
         private readonly GameController _controller;
 
         private ScoreServiceResult _executeUpdateScoreFlowResponse;
+        private List<GameSearchResult> _gameSearchResults;
+        private List<CountrySearchResult> _countrySearchResults;
 
         public GameControllerTests()
         {
@@ -24,17 +28,22 @@ namespace Game.Server.Test.Controllers
                 .Setup(m => m.ExecuteUpdateScoreFlow(It.IsAny<string>(), It.IsAny<ConsumptionResources>()))
                 .ReturnsAsync(() => _executeUpdateScoreFlowResponse);
 
+            _gameSearchResults = new List<GameSearchResult>();
             _mockIGameDataService = new Mock<IGameDataService>();
+            _mockIGameDataService.Setup(m => m.GetListOfActiveGames()).ReturnsAsync(_gameSearchResults);
+            _mockIGameDataService.Setup(m => m.GetListOfCountriesInGame(It.IsAny<Guid>())).ReturnsAsync(_countrySearchResults);
 
             _executeUpdateScoreFlowResponse = new ScoreServiceResult
             {
                 Excess = new ConsumptionResources(),
-                NextYearTarget = new ConsumptionResources()
+                NextYearTarget = new ConsumptionResources(),
+                Scores = new ConsumptionResources()
             };
 
             _controller = new GameController(_mockIGameFlowService.Object, _mockIGameDataService.Object);
         }
 
+        #region UpdateScores
         [Fact]
         public async Task UpdateScores_ShouldCallGameFlowServiceWith_GameIdCountryIdYearYearResults()
         {
@@ -62,6 +71,37 @@ namespace Game.Server.Test.Controllers
 
             Assert.Same(_executeUpdateScoreFlowResponse.NextYearTarget, response.NextYearTarget);
             Assert.Same(_executeUpdateScoreFlowResponse.Excess, response.Excess);
+            Assert.Same(_executeUpdateScoreFlowResponse.Scores, response.Scores);
         }
+
+        #endregion
+
+        #region Games
+
+        [Fact]
+        public async Task Games_ShouldReturnTheTaskFrom_GameDataService_GetListOfActiveGames()
+        {
+            var response = await _controller.Games();
+
+            Assert.Same(_gameSearchResults, response);
+        }
+
+        #endregion
+
+        #region Countries
+
+        [Fact]
+        public async Task Countries_ShouldReturnTheTaskFrom_GameDataService_GetListOfCountriesInGame()
+        {
+            var guid = Guid.Parse("85caca0c-00d5-47a1-9467-915a134e47db");
+
+            var response = await _controller.Countries(guid);
+
+            _mockIGameDataService.Setup(m => m.GetListOfCountriesInGame(guid));
+
+            Assert.Same(_countrySearchResults, response);
+        }
+
+        #endregion
     }
 }
