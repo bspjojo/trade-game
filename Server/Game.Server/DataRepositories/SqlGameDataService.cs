@@ -121,10 +121,38 @@ namespace Game.Server.DataRepositories
             };
         }
 
-        public Task<ConsumptionResources> GetTargetsForACountryForAYear(string countryId, int year)
+        public async Task<ConsumptionResources> GetTargetsForACountryForAYear(string countryId, int year)
         {
-            //ConsumptionResourceDAO
-            throw new NotImplementedException();
+            var yearTargetsForCountryForYear = @"SELECT YearTargets.Chocolate
+                                                    , YearTargets.Energy
+                                                    , YearTargets.Grain
+                                                    , YearTargets.Meat
+                                                    , YearTargets.Textiles
+                                                FROM dbo.Game_Country_Year_Targets as YearTargets
+                                                WHERE YearTargets.Year = @Year
+                                                AND YearTargets.GameCountryID = @CountryId";
+
+            ConsumptionResourceDAO result = null;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                result = await connection.QueryFirstAsync<ConsumptionResourceDAO>(yearTargetsForCountryForYear, new
+                {
+                    CountryId = countryId,
+                    Year = year
+                });
+                connection.Close();
+            }
+
+            return new ConsumptionResources
+            {
+                Meat = result.Meat,
+                Chocolate = result.Chocolate,
+                Textiles = result.Textiles,
+                Energy = result.Energy,
+                Grain = result.Grain
+            };
         }
 
         public async Task<GameInformationResult> GetGameInformationForACountry(string countryId)
@@ -152,6 +180,99 @@ namespace Game.Server.DataRepositories
                 CurrentYear = result.CurrentYear,
                 Id = result.Id
             };
+        }
+
+        public async Task SetCountryYearExcess(string countryId, int year, ConsumptionResources excess)
+        {
+            var updateExcessForCountryForYear = @"BEGIN TRAN
+                                                UPDATE dbo.Game_Country_Year_Excess
+                                                SET Chocolate = @Chocolate, Energy = @Energy, Grain = @Grain, Meat = @Meat, Textiles = @Textiles
+                                                WHERE GameCountryID = @CountryId AND Year = @Year
+                                                IF @@ROWCOUNT=0
+                                                    INSERT INTO dbo.Game_Country_Year_Excess
+                                                    (GameCountryID, Year, Chocolate, Energy, Grain, Meat, Textiles)
+                                                VALUES
+                                                    (@CountryID, @Year, @Chocolate, @Energy, @Grain, @Meat, @Textiles)
+
+                                                COMMIT TRAN";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                await connection.ExecuteAsync(updateExcessForCountryForYear, new
+                {
+                    CountryId = countryId,
+                    Year = year,
+                    Chocolate = excess.Chocolate,
+                    Energy = excess.Energy,
+                    Grain = excess.Grain,
+                    Meat = excess.Meat,
+                    Textiles = excess.Textiles
+                });
+                connection.Close();
+            }
+        }
+
+        public async Task SetCountryYearScores(string countryId, int year, ConsumptionResources score)
+        {
+            var updateScoresForCountryForYear = @"BEGIN TRAN
+                                                UPDATE dbo.Game_Country_Year_Score
+                                                SET Chocolate = @Chocolate, Energy = @Energy, Grain = @Grain, Meat = @Meat, Textiles = @Textiles
+                                                WHERE GameCountryID = @CountryId AND Year = @Year
+                                                IF @@ROWCOUNT=0
+                                                    INSERT INTO dbo.Game_Country_Year_Score
+                                                    (GameCountryID, Year, Chocolate, Energy, Grain, Meat, Textiles)
+                                                VALUES
+                                                    (@CountryID, @Year, @Chocolate, @Energy, @Grain, @Meat, @Textiles)
+
+                                                COMMIT TRAN";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                await connection.ExecuteAsync(updateScoresForCountryForYear, new
+                {
+                    CountryId = countryId,
+                    Year = year,
+                    Chocolate = score.Chocolate,
+                    Energy = score.Energy,
+                    Grain = score.Grain,
+                    Meat = score.Meat,
+                    Textiles = score.Textiles
+                });
+                connection.Close();
+            }
+        }
+
+        public async Task SetCountryYearTargets(string countryId, int year, ConsumptionResources targets)
+        {
+            var updateTargetsForCountryForYear = @"BEGIN TRAN
+                                                UPDATE dbo.Game_Country_Year_Targets
+                                                SET Chocolate = @Chocolate, Energy = @Energy, Grain = @Grain, Meat = @Meat, Textiles = @Textiles
+                                                WHERE GameCountryID = @CountryId AND Year = @Year
+                                                IF @@ROWCOUNT=0
+                                                    INSERT INTO dbo.Game_Country_Year_Targets
+                                                    (GameCountryID, Year, Chocolate, Energy, Grain, Meat, Textiles)
+                                                VALUES
+                                                    (@CountryID, @Year, @Chocolate, @Energy, @Grain, @Meat, @Textiles)
+
+                                                COMMIT TRAN";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                await connection.ExecuteAsync(updateTargetsForCountryForYear, new
+                {
+                    CountryId = countryId,
+                    Year = year,
+                    Chocolate = targets.Chocolate,
+                    Energy = targets.Energy,
+                    Grain = targets.Grain,
+                    Meat = targets.Meat,
+                    Textiles = targets.Textiles
+                });
+                connection.Close();
+            }
         }
     }
 }

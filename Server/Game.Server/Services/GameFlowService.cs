@@ -32,8 +32,9 @@ namespace Game.Server.Services
 
             _gameScoreService.CalculateYearValues(breakEven, targetsForCurrentYear, consumptionResourcesRecorded, out var currentYearExcess, out var currentYearScores, out var nextYearTargets);
 
-            // var scores = country.Years[year].Scores;
-            // var excess = country.Years[year].Excess;
+            await _gameDataService.SetCountryYearExcess(countryId, gameInformation.CurrentYear, currentYearExcess);
+            await _gameDataService.SetCountryYearScores(countryId, gameInformation.CurrentYear, currentYearScores);
+            await _gameDataService.SetCountryYearTargets(countryId, gameInformation.CurrentYear + 1, nextYearTargets);
 
             //await _gameHubService.ScoresUpdated(gameId, c)
 
