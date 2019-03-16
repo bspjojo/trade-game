@@ -45,7 +45,7 @@ namespace Game.Server.Test.Services
             _mockIGameDataService.Setup(m => m.GetTargetsForACountryForAYear("cId", 2)).ReturnsAsync(() => _getTargetsForACountryForAYearResult);
             _mockIGameDataService.Setup(m => m.SetCountryYearExcess("cId", 2, _excess)).Returns(() => Task.CompletedTask);
             _mockIGameDataService.Setup(m => m.SetCountryYearScores("cId", 2, _scores)).Returns(() => Task.CompletedTask);
-            _mockIGameDataService.Setup(m => m.SetCountryYearTargets("cId", 2, _targets)).Returns(() => Task.CompletedTask);
+            _mockIGameDataService.Setup(m => m.SetCountryYearTargets("cId", 3, _targets)).Returns(() => Task.CompletedTask);
 
             _mockIGameScoreService = new Mock<IGameScoreService>();
             _mockIGameScoreService.Setup(m => m.CalculateYearValues(_getBreakEvenForACountryResult, _getTargetsForACountryForAYearResult, _recorded, out _excess, out _scores, out _targets));
@@ -72,6 +72,16 @@ namespace Game.Server.Test.Services
             Assert.Same(_excess, res.Excess);
             Assert.Same(_scores, res.Scores);
             Assert.Same(_targets, res.NextYearTarget);
+        }
+
+        [Fact]
+        public async void ExecuteUpdateScoreFlow_Should_UpdateTheDatabaseValues()
+        {
+            var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
+
+            _mockIGameDataService.Verify(m => m.SetCountryYearExcess("cId", 2, _excess));
+            _mockIGameDataService.Verify(m => m.SetCountryYearScores("cId", 2, _scores));
+            _mockIGameDataService.Verify(m => m.SetCountryYearTargets("cId", 3, _targets));
         }
     }
 }
