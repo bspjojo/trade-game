@@ -8,7 +8,7 @@ export class GameService {
     private hubConnection: signalR.HubConnection;
     private hubConnectionStartPromise: Promise<void>;
 
-    constructor(private configService: ConfigService) {
+    constructor(configService: ConfigService) {
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(configService.config.apiUrl + 'hubs/game')
             .build();
