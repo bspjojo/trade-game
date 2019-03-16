@@ -10,26 +10,25 @@ namespace Game.Server.Test.Services
         [Fact]
         public void CalculateYearValues_Should_CalculateTargetsForResources()
         {
-            var country = new GameCountry
+            var targets = new ConsumptionResources
             {
-                Years = new ConcurrentDictionary<int, CountryYear>()
+                Chocolate = 5,
+                Energy = 5,
+                Grain = 5,
+                Meat = 5,
+                Textiles = 5
             };
 
-            country.Years[0] = new CountryYear
+            var breakEven = new ConsumptionResources
             {
-                Targets = new ConsumptionResources
-                {
-                    Chocolate = 5,
-                    Energy = 5,
-                    Grain = 5,
-                    Meat = 5,
-                    Textiles = 5
-                }
+                Chocolate = 5,
+                Energy = 5,
+                Grain = 5,
+                Meat = 5,
+                Textiles = 5
             };
 
-            country.Years[1] = new CountryYear();
-
-            var recordedScore = new ConsumptionResources
+            var consumptionRecorded = new ConsumptionResources
             {
                 Chocolate = 4,
                 Energy = 3,
@@ -39,40 +38,37 @@ namespace Game.Server.Test.Services
             };
 
             var gss = new GameScoreService();
-            gss.CalculateYearValues(0, country, recordedScore);
+            gss.CalculateYearValues(breakEven, targets, consumptionRecorded, out var excess, out var scores, out var nextYearTargets);
 
-            var calcd = country.Years[1].Targets;
-
-            Assert.Equal(6, calcd.Chocolate);
-            Assert.Equal(7, calcd.Energy);
-            Assert.Equal(8, calcd.Grain);
-            Assert.Equal(5, calcd.Meat);
-            Assert.Equal(5, calcd.Textiles);
+            Assert.Equal(6, nextYearTargets.Chocolate);
+            Assert.Equal(7, nextYearTargets.Energy);
+            Assert.Equal(8, nextYearTargets.Grain);
+            Assert.Equal(5, nextYearTargets.Meat);
+            Assert.Equal(5, nextYearTargets.Textiles);
         }
 
         [Fact]
         public void CalculateYearValues_Should_CalculateScoresForResources()
         {
-            var country = new GameCountry
+            var targets = new ConsumptionResources
             {
-                Years = new ConcurrentDictionary<int, CountryYear>()
+                Chocolate = 5,
+                Energy = 5,
+                Grain = 5,
+                Meat = 5,
+                Textiles = 5
             };
 
-            country.Years[0] = new CountryYear
+            var breakEven = new ConsumptionResources
             {
-                Targets = new ConsumptionResources
-                {
-                    Chocolate = 5,
-                    Energy = 5,
-                    Grain = 5,
-                    Meat = 5,
-                    Textiles = 5
-                }
+                Chocolate = 5,
+                Energy = 5,
+                Grain = 5,
+                Meat = 5,
+                Textiles = 5
             };
 
-            country.Years[1] = new CountryYear();
-
-            var recordedScore = new ConsumptionResources
+            var consumptionRecorded = new ConsumptionResources
             {
                 Chocolate = 4,
                 Energy = 3,
@@ -82,40 +78,37 @@ namespace Game.Server.Test.Services
             };
 
             var gss = new GameScoreService();
-            gss.CalculateYearValues(0, country, recordedScore);
+            gss.CalculateYearValues(breakEven, targets, consumptionRecorded, out var excess, out var scores, out var nextYearTargets);
 
-            var calcd = country.Years[0].Scores;
-
-            Assert.Equal(-1, calcd.Chocolate);
-            Assert.Equal(-2, calcd.Energy);
-            Assert.Equal(-3, calcd.Grain);
-            Assert.Equal(1, calcd.Meat);
-            Assert.Equal(0, calcd.Textiles);
+            Assert.Equal(-1, scores.Chocolate);
+            Assert.Equal(-2, scores.Energy);
+            Assert.Equal(-3, scores.Grain);
+            Assert.Equal(1, scores.Meat);
+            Assert.Equal(0, scores.Textiles);
         }
 
         [Fact]
         public void CalculateYearValues_Should_CalculateExcessesForResources()
         {
-            var country = new GameCountry
+            var targets = new ConsumptionResources
             {
-                Years = new ConcurrentDictionary<int, CountryYear>()
+                Chocolate = 5,
+                Energy = 5,
+                Grain = 5,
+                Meat = 5,
+                Textiles = 5
             };
 
-            country.Years[0] = new CountryYear
+            var breakEven = new ConsumptionResources
             {
-                Targets = new ConsumptionResources
-                {
-                    Chocolate = 5,
-                    Energy = 5,
-                    Grain = 5,
-                    Meat = 5,
-                    Textiles = 5
-                }
+                Chocolate = 5,
+                Energy = 5,
+                Grain = 5,
+                Meat = 5,
+                Textiles = 5
             };
 
-            country.Years[1] = new CountryYear();
-
-            var recordedScore = new ConsumptionResources
+            var consumptionRecorded = new ConsumptionResources
             {
                 Chocolate = 4,
                 Energy = 3,
@@ -125,15 +118,13 @@ namespace Game.Server.Test.Services
             };
 
             var gss = new GameScoreService();
-            gss.CalculateYearValues(0, country, recordedScore);
+            gss.CalculateYearValues(breakEven, targets, consumptionRecorded, out var excess, out var scores, out var nextYearTargets);
 
-            var calcd = country.Years[0].Excess;
-
-            Assert.Equal(0, calcd.Chocolate);
-            Assert.Equal(0, calcd.Energy);
-            Assert.Equal(0, calcd.Grain);
-            Assert.Equal(1, calcd.Meat);
-            Assert.Equal(0, calcd.Textiles);
+            Assert.Equal(0, excess.Chocolate);
+            Assert.Equal(0, excess.Energy);
+            Assert.Equal(0, excess.Grain);
+            Assert.Equal(1, excess.Meat);
+            Assert.Equal(0, excess.Textiles);
         }
     }
 }

@@ -1,4 +1,6 @@
-using System.Collections.Concurrent;
+using System;
+using System.Threading.Tasks;
+using Game.Server.DataRepositories;
 using Game.Server.Services;
 using Game.Server.Services.Models;
 using Moq;
@@ -13,127 +15,73 @@ namespace Game.Server.Test.Services
         private Mock<IGameScoreService> _mockIGameScoreService;
 
         private GameFlowService _gameFlowService;
-        private GameCountry _gameCountry;
+
+        private GameInformationResult _getGameInformationForACountryResult;
+        private ConsumptionResources _getBreakEvenForACountryResult;
+        private ConsumptionResources _getTargetsForACountryForAYearResult;
+        private ConsumptionResources _excess;
+        private ConsumptionResources _scores;
+        private ConsumptionResources _targets;
+        private ConsumptionResources _recorded;
+
 
         public GameFlowServiceTests()
         {
-            _gameCountry = new GameCountry
+            _getGameInformationForACountryResult = new GameInformationResult
             {
-                Years = new ConcurrentDictionary<int, CountryYear>()
+                Id = Guid.Parse("81a130d2-502f-4cf1-a376-63edeb000e9f"),
+                CurrentYear = 2
             };
-
-            _gameCountry.Years.TryAdd(0, new CountryYear
-            {
-                Excess = new ConsumptionResources(),
-                Scores = new ConsumptionResources(),
-                Targets = new ConsumptionResources()
-            });
+            _getBreakEvenForACountryResult = new ConsumptionResources();
+            _getTargetsForACountryForAYearResult = new ConsumptionResources();
+            _excess = new ConsumptionResources();
+            _scores = new ConsumptionResources();
+            _targets = new ConsumptionResources();
+            _recorded = new ConsumptionResources();
 
             _mockIGameDataService = new Mock<IGameDataService>();
-            _mockIGameDataService.Setup(m => m.GetCountryById("game", "country")).ReturnsAsync(() => _gameCountry);
+            _mockIGameDataService.Setup(m => m.GetGameInformationForACountry("cId")).ReturnsAsync(() => _getGameInformationForACountryResult);
+            _mockIGameDataService.Setup(m => m.GetBreakEvenForACountry("cId")).ReturnsAsync(() => _getBreakEvenForACountryResult);
+            _mockIGameDataService.Setup(m => m.GetTargetsForACountryForAYear("cId", 2)).ReturnsAsync(() => _getTargetsForACountryForAYearResult);
+            _mockIGameDataService.Setup(m => m.SetCountryYearExcess("cId", 2, _excess)).Returns(() => Task.CompletedTask);
+            _mockIGameDataService.Setup(m => m.SetCountryYearScores("cId", 2, _scores)).Returns(() => Task.CompletedTask);
+            _mockIGameDataService.Setup(m => m.SetCountryYearTargets("cId", 3, _targets)).Returns(() => Task.CompletedTask);
+
+            _mockIGameScoreService = new Mock<IGameScoreService>();
+            _mockIGameScoreService.Setup(m => m.CalculateYearValues(_getBreakEvenForACountryResult, _getTargetsForACountryForAYearResult, _recorded, out _excess, out _scores, out _targets));
 
             _mockIGameHubService = new Mock<IGameHubService>();
-            _mockIGameScoreService = new Mock<IGameScoreService>();
+            _mockIGameHubService.Setup(m => m.ScoresUpdated("81a130d2-502f-4cf1-a376-63edeb000e9f", "cId", 2, _scores)).Returns(() => Task.CompletedTask);
 
             _gameFlowService = new GameFlowService(_mockIGameDataService.Object, _mockIGameHubService.Object, _mockIGameScoreService.Object);
         }
 
         [Fact]
-        public async void ExecuteUpdateScoreFlow_ShouldGetTheCountryFromTheGameDataService()
+        public async void ExecuteUpdateScoreFlow_Should_BroadCastTheScoresToTheGameHub()
         {
-            var resources = new ConsumptionResources
-            {
-                Chocolate = 3,
-                Meat = 3,
-                Textiles = 3,
-                Grain = 3,
-                Energy = 3
-            };
+            await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
 
-            await _gameFlowService.ExecuteUpdateScoreFlow("game", "country", 0, resources);
-
-            _mockIGameDataService.Verify(m => m.GetCountryById("game", "country"));
+            _mockIGameHubService.Verify(m => m.ScoresUpdated("81a130d2-502f-4cf1-a376-63edeb000e9f", "cId", 2, _scores));
         }
 
         [Fact]
-        public async void ExecuteUpdateScoreFlow_ShouldAddAYearToTheCountry()
+        public async void ExecuteUpdateScoreFlow_Should_ReturnTheScoringInformation()
         {
-            var resources = new ConsumptionResources
-            {
-                Chocolate = 3,
-                Meat = 3,
-                Textiles = 3,
-                Grain = 3,
-                Energy = 3
-            };
+            var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
 
-            await _gameFlowService.ExecuteUpdateScoreFlow("game", "country", 0, resources);
-
-            _gameCountry.Years.TryGetValue(1, out var c);
-
-            Assert.NotNull(c);
+            Assert.Same(_excess, res.Excess);
+            Assert.Same(_scores, res.Scores);
+            Assert.Same(_targets, res.NextYearTarget);
         }
 
         [Fact]
-        public async void ExecuteUpdateScoreFlow_ShouldCallGameScoreServiceToCalculateTheYearValues()
+        public async void ExecuteUpdateScoreFlow_Should_UpdateTheDatabaseValues()
         {
-            var resources = new ConsumptionResources
-            {
-                Chocolate = 3,
-                Meat = 3,
-                Textiles = 3,
-                Grain = 3,
-                Energy = 3
-            };
+            var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
 
-            await _gameFlowService.ExecuteUpdateScoreFlow("game", "country", 0, resources);
-
-            _mockIGameScoreService.Verify(m => m.CalculateYearValues(0, _gameCountry, resources));
-        }
-
-        [Fact]
-        public async void ExecuteUpdateScoreFlow_ShouldCallTheGameHubServiceToSignalAnUpdateToTheScores()
-        {
-            var resources = new ConsumptionResources
-            {
-                Chocolate = 3,
-                Meat = 3,
-                Textiles = 3,
-                Grain = 3,
-                Energy = 3
-            };
-
-            await _gameFlowService.ExecuteUpdateScoreFlow("game", "country", 0, resources);
-
-            var scores = _gameCountry.Years[0].Scores;
-
-            _mockIGameHubService.Verify(m => m.ScoresUpdated("game", "country", 0, scores));
-        }
-
-        [Fact]
-        public async void ExecuteUpdateScoreFlow_ShouldReturnAnObjectWithNextYearsTargetsAndTheExcess()
-        {
-            var resources = new ConsumptionResources
-            {
-                Chocolate = 3,
-                Meat = 3,
-                Textiles = 3,
-                Grain = 3,
-                Energy = 3
-            };
-
-            _mockIGameScoreService.Setup(m => m.CalculateYearValues(It.IsAny<int>(), It.IsAny<GameCountry>(), It.IsAny<ConsumptionResources>())).Callback(() =>
-            {
-                _gameCountry.Years[1].Targets = new ConsumptionResources();
-            });
-
-            var result = await _gameFlowService.ExecuteUpdateScoreFlow("game", "country", 0, resources);
-
-            Assert.NotNull(result.Excess);
-            Assert.Equal(_gameCountry.Years[0].Excess, result.Excess);
-
-            Assert.NotNull(result.NextYearTarget);
-            Assert.Equal(_gameCountry.Years[1].Targets, result.NextYearTarget);
+            _mockIGameDataService.Verify(m => m.SetCountryYearExcess("cId", 2, _excess));
+            _mockIGameDataService.Verify(m => m.SetCountryYearScores("cId", 2, _scores));
+            _mockIGameDataService.Verify(m => m.SetCountryYearTargets("cId", 3, _targets));
         }
     }
 }

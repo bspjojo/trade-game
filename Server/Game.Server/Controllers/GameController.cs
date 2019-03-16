@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Game.Server.Models;
 using Game.Server.Services;
+using Game.Server.DataRepositories;
 using Game.Server.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -25,26 +26,27 @@ namespace Game.Server.Controllers
         [HttpPost]
         public async Task<ScorerClientScoreUpdateResponse> UpdateScores([FromBody] ScorerClientScoreUpdate roundResults)
         {
-            var scoreUpdateResult = await _gameFlowService.ExecuteUpdateScoreFlow(roundResults.GameId, roundResults.CountryId, roundResults.Year, roundResults.YearResults);
+            var scoreUpdateResult = await _gameFlowService.ExecuteUpdateScoreFlow(roundResults.CountryId, roundResults.YearResults);
 
             var response = new ScorerClientScoreUpdateResponse
             {
                 NextYearTarget = scoreUpdateResult.NextYearTarget,
-                Excess = scoreUpdateResult.Excess
+                Excess = scoreUpdateResult.Excess,
+                Scores = scoreUpdateResult.Scores
             };
 
             return response;
         }
 
         [HttpGet]
-        public Task<List<GameSearchResult>> Games()
+        public Task<IEnumerable<GameSearchResult>> Games()
         {
-            return _gameDataService.GetListOfGames();
+            return _gameDataService.GetListOfActiveGames();
         }
 
         [HttpGet]
         [Route("{gameId}")]
-        public Task<List<CountrySearchResult>> Countries(string gameId)
+        public Task<IEnumerable<CountrySearchResult>> Countries(Guid gameId)
         {
             return _gameDataService.GetListOfCountriesInGame(gameId);
         }

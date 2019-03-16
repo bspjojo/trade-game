@@ -27,7 +27,6 @@ export class ScoringComponentService {
         let processedRequestObject = {
             gameId: this.gameSelectionService.game.id,
             countryId: this.selectedCountry.id,
-            year: 0,
             yearResults
         };
 

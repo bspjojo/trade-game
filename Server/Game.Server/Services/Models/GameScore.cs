@@ -5,22 +5,22 @@ namespace Game.Server.Services.Models
 {
     public class GameSearchResult
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-    }
-    
-    public class CountrySearchResult
-    {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
+        public DateTime DateStarted { get; set; }
         public string Name { get; set; }
     }
 
-    public class GameModel
+    public class CountrySearchResult
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public DateTime GameDate { get; set; }
-        public ConcurrentDictionary<string, GameCountry> GameCountries { get; set; }
+    }
+
+    public class GameInformationResult
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public int CurrentYear { get; set; }
     }
 
     public class GameCountry

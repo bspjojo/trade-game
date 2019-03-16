@@ -1,0 +1,11 @@
+version: "3"
+services:
+    db:
+        image: "microsoft/mssql-server-linux"
+        container_name: scout-trade-game-sql
+        environment:
+            SA_PASSWORD: "MSSQLServer_Linux"
+            ACCEPT_EULA: "Y"
+        ports:
+            - "9001:1433"
+        restart: always

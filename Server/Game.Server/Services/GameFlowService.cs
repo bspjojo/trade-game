@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using Game.Server.Services.Models;
+using Game.Server.DataRepositories;
 
 namespace Game.Server.Services
 {
     public interface IGameFlowService
     {
-        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string gameId, string countryId, int year, ConsumptionResources productionRecorded);
+        Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, ConsumptionResources consumptionResourcesRecorded);
     }
 
     public class GameFlowService : IGameFlowService
@@ -22,24 +23,26 @@ namespace Game.Server.Services
             _gameScoreService = gameScoreService;
         }
 
-        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string gameId, string countryId, int year, ConsumptionResources productionRecorded)
+        public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, ConsumptionResources consumptionResourcesRecorded)
         {
-            var country = await _gameDataService.GetCountryById(gameId, countryId);
+            var gameInformation = await _gameDataService.GetGameInformationForACountry(countryId);
 
-            // do max year stuff
-            country.Years[year + 1] = new CountryYear();
+            var breakEven = await _gameDataService.GetBreakEvenForACountry(countryId);
+            var targetsForCurrentYear = await _gameDataService.GetTargetsForACountryForAYear(countryId, gameInformation.CurrentYear);
 
-            _gameScoreService.CalculateYearValues(year, country, productionRecorded);
+            _gameScoreService.CalculateYearValues(breakEven, targetsForCurrentYear, consumptionResourcesRecorded, out var currentYearExcess, out var currentYearScores, out var nextYearTargets);
 
-            var scores = country.Years[year].Scores;
-            var excess = country.Years[year].Excess;
+            await _gameDataService.SetCountryYearExcess(countryId, gameInformation.CurrentYear, currentYearExcess);
+            await _gameDataService.SetCountryYearScores(countryId, gameInformation.CurrentYear, currentYearScores);
+            await _gameDataService.SetCountryYearTargets(countryId, gameInformation.CurrentYear + 1, nextYearTargets);
 
-            await _gameHubService.ScoresUpdated(gameId, countryId, year, scores);
+            await _gameHubService.ScoresUpdated(gameInformation.Id.ToString(), countryId, gameInformation.CurrentYear, currentYearScores);
 
             return new ScoreServiceResult
             {
-                NextYearTarget = country.Years[year + 1].Targets,
-                Excess = excess
+                NextYearTarget = nextYearTargets,
+                Excess = currentYearExcess,
+                Scores = currentYearScores
             };
         }
     }
