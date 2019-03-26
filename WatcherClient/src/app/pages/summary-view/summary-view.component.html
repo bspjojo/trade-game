@@ -1,5 +1,16 @@
-<p>
-    summary-view works!
-</p>
-
-<pre>{{game|json}}</pre>
+<table *ngIf="game != null">
+    <thead>
+        <tr>
+            <th>
+                Game
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let country of game.countries">
+            <td>{{country.name}}</td>
+            <td>{{country.targetScore}}</td>
+            <td>{{country.scores|json}}</td>
+        </tr>
+    </tbody>
+</table>
