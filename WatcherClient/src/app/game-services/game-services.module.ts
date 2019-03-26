@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameService } from './game-services.service';
+import { GameHubService } from './game-hub.service';
 
 @NgModule({
     declarations: [],
@@ -8,7 +8,7 @@ import { GameService } from './game-services.service';
         CommonModule
     ],
     providers: [
-        GameService
+        GameHubService
     ],
     exports: []
 })

@@ -4,7 +4,7 @@ import * as signalR from '@aspnet/signalr';
 import { ConfigService } from '../app-config/config.service';
 
 @Injectable()
-export class GameService {
+export class GameHubService {
     private hubConnection: signalR.HubConnection;
     private hubConnectionStartPromise: Promise<void>;
 
