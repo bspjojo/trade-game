@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 
 import * as signalR from '@aspnet/signalr';
 import { ConfigService } from '../app-config/config.service';
+import { Game } from './game.model';
+import { GameDataService } from './game-data.service';
 
 @Injectable()
 export class GameHubService {
     private hubConnection: signalR.HubConnection;
     private hubConnectionStartPromise: Promise<void>;
 
-    constructor(configService: ConfigService) {
+    constructor(configService: ConfigService, gameDataService: GameDataService) {
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(configService.config.apiUrl + 'hubs/game')
             .build();
@@ -19,7 +21,7 @@ export class GameHubService {
             .then(() => {
                 console.log('Connection started!');
 
-                this.hubConnection.on('ScoresUpdated', (...args) => console.log(args));
+                this.hubConnection.on('ScoresUpdated', (gameData: Game) => gameDataService.setNewGameData(gameData));
             })
             .catch(err => console.log('Error while establishing connection', err));
     }
