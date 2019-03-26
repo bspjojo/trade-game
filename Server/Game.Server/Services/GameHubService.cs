@@ -7,7 +7,7 @@ namespace Game.Server.Services
 {
     public interface IGameHubService
     {
-        Task ScoresUpdated(string gameId, string countryId, int year, ConsumptionResources scores);
+        Task ScoresUpdated(string gameId, GameScoresBroadcastModel scores);
     }
 
     public class GameHubService : IGameHubService
@@ -19,16 +19,9 @@ namespace Game.Server.Services
             _gameHubContext = gameHubContext;
         }
 
-        public Task ScoresUpdated(string gameId, string countryId, int year, ConsumptionResources scores)
+        public Task ScoresUpdated(string gameId, GameScoresBroadcastModel scores)
         {
-            var broadCastModel = new ScoreUpdatedBroadcastModel
-            {
-                CountryId = countryId,
-                Year = year,
-                Scores = scores
-            };
-
-            return _gameHubContext.Clients.Group(gameId).ScoresUpdated(broadCastModel);
+            return _gameHubContext.Clients.Group(gameId).ScoresUpdated(scores);
         }
     }
 }

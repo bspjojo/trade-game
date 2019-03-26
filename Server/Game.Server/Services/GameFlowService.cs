@@ -15,12 +15,14 @@ namespace Game.Server.Services
         private readonly IGameDataService _gameDataService;
         private readonly IGameHubService _gameHubService;
         private readonly IGameScoreService _gameScoreService;
+        private readonly IGameUpdatedService _gameUpdatedService;
 
-        public GameFlowService(IGameDataService gameDataService, IGameHubService gameHubService, IGameScoreService gameScoreService)
+        public GameFlowService(IGameDataService gameDataService, IGameHubService gameHubService, IGameScoreService gameScoreService, IGameUpdatedService gameUpdatedService)
         {
             _gameDataService = gameDataService;
             _gameHubService = gameHubService;
             _gameScoreService = gameScoreService;
+            _gameUpdatedService = gameUpdatedService;
         }
 
         public async Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, ConsumptionResources consumptionResourcesRecorded)
@@ -36,7 +38,7 @@ namespace Game.Server.Services
             await _gameDataService.SetCountryYearScores(countryId, gameInformation.CurrentYear, currentYearScores);
             await _gameDataService.SetCountryYearTargets(countryId, gameInformation.CurrentYear + 1, nextYearTargets);
 
-            await _gameHubService.ScoresUpdated(gameInformation.Id.ToString(), countryId, gameInformation.CurrentYear, currentYearScores);
+            _gameUpdatedService.GameUpdated(gameInformation.Id.ToString());
 
             return new ScoreServiceResult
             {

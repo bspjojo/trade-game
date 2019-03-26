@@ -16,5 +16,6 @@ namespace Game.Server.DataRepositories
         Task SetCountryYearTargets(string countryId, int year, ConsumptionResources targets);
         Task<IEnumerable<GameSearchResult>> GetListOfActiveGames();
         Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId);
+        Task<GameScoresBroadcastModel> GetGameScores(string gameId);
     }
 }
