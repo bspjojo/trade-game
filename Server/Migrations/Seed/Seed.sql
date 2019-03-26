@@ -1,5 +1,3 @@
-
-
 -- SEED
 
 insert INTO dbo.Scenarios
