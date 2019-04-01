@@ -8,6 +8,7 @@ namespace Game.Server.Models.DataAccessModels
         public string Name { get; set; }
         public int TargetScore { get; set; }
         public int Year { get; set; }
+        public int Duration { get; set; }
         public int Energy { get; set; }
         public int Chocolate { get; set; }
         public int Meat { get; set; }

@@ -281,6 +281,7 @@ namespace Game.Server.DataRepositories
                                     , ScenarioCountries.Name
                                     , ScenarioCountries.TargetScore
                                     , CountryYearScores.Year
+                                    , Scenarios.Duration
                                     , CountryYearScores.Meat
                                     , CountryYearScores.Grain
                                     , CountryYearScores.Chocolate
@@ -289,6 +290,8 @@ namespace Game.Server.DataRepositories
                                 FROM dbo.Game_Countries AS GameCountries
                                     LEFT JOIN dbo.Scenario_Countries AS ScenarioCountries
                                     ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
+                                    LEFT JOIN dbo.Scenarios AS Scenarios
+                                    ON Scenarios.ID = ScenarioCountries.ScenarioID
                                     INNER JOIN dbo.Game_Country_Year_Score AS CountryYearScores ON CountryYearScores.GameCountryID = GameCountries.ID
                                 WHERE GameID = @GameId
                                 ORDER BY CountryYearScores.Year DESC, ScenarioCountries.Name";
@@ -308,9 +311,12 @@ namespace Game.Server.DataRepositories
 
             var countryDictionary = new Dictionary<string, ScenarioCountry>();
 
+            int duration;
+
             foreach (var r in result)
             {
                 ScenarioCountry scenarioCountry;
+                duration = r.Duration;
 
                 if (!countryDictionary.TryGetValue(r.GameCountryId.ToString(), out scenarioCountry))
                 {
@@ -332,7 +338,8 @@ namespace Game.Server.DataRepositories
                     Chocolate = r.Chocolate,
                     Grain = r.Grain,
                     Energy = r.Energy,
-                    Textiles = r.Textiles
+                    Textiles = r.Textiles,
+                    Score = r.Meat + r.Chocolate + r.Grain + r.Energy + r.Textiles
                 };
 
                 scenarioCountry.Scores.Add(t);
@@ -346,6 +353,7 @@ namespace Game.Server.DataRepositories
             var bm = new GameScoresBroadcastModel
             {
                 Id = Guid.Parse(gameId),
+                Duration = duration,
                 Countries = countryDictionary.Values.ToList()
             };
 

@@ -6,7 +6,7 @@ namespace Game.Server.Services.Models
     public class GameScoresBroadcastModel
     {
         public Guid Id { get; set; }
-
+        public int Duration { get; set; }
         public List<ScenarioCountry> Countries { get; set; }
     }
 
@@ -21,5 +21,6 @@ namespace Game.Server.Services.Models
     public class ConsumptionResourcesForAYear : ConsumptionResources
     {
         public int Year { get; set; }
+        public int Score { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 export interface Game {
     id: string;
     countries: Country[];
+    duration: number;
 }
 
 export interface Country {
@@ -16,4 +17,5 @@ export interface Year {
     grain: number;
     meat: number;
     textiles: number;
+    score: number;
 }
