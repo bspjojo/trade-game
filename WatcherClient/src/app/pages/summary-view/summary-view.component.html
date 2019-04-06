@@ -1,16 +1,19 @@
 <table *ngIf="game != null">
+    <caption>
+        Game
+    </caption>
     <thead>
         <tr>
-            <th>
-                Game
-            </th>
+            <th>Name</th>
+            <th>Target Score</th>
+            <th *ngFor="let n of game.duration | timesRepeat:1; index as i">{{n}}</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let country of game.countries">
             <td>{{country.name}}</td>
             <td>{{country.targetScore}}</td>
-            <td>{{country.scores|json}}</td>
+            <td *ngFor="let n of game.duration | timesRepeat">{{country.scores[n]?.score}}</td>
         </tr>
     </tbody>
 </table>
