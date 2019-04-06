@@ -311,7 +311,7 @@ namespace Game.Server.DataRepositories
 
             var countryDictionary = new Dictionary<string, ScenarioCountry>();
 
-            int duration;
+            var duration = 0;
 
             foreach (var r in result)
             {
