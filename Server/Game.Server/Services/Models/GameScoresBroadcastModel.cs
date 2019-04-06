@@ -15,6 +15,7 @@ namespace Game.Server.Services.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int TargetScore { get; set; }
+        public int CurrentScore { get; set; }
         public List<ConsumptionResourcesForAYear> Scores;
     }
 

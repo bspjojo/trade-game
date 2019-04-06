@@ -324,6 +324,7 @@ namespace Game.Server.DataRepositories
                     {
                         Id = r.GameCountryId,
                         TargetScore = r.TargetScore,
+                        CurrentScore = 0,
                         Name = r.Name,
                         Scores = new List<ConsumptionResourcesForAYear>()
                     };
@@ -342,6 +343,7 @@ namespace Game.Server.DataRepositories
                     Score = r.Meat + r.Chocolate + r.Grain + r.Energy + r.Textiles
                 };
 
+                scenarioCountry.CurrentScore += t.Score;
                 scenarioCountry.Scores.Add(t);
             }
 

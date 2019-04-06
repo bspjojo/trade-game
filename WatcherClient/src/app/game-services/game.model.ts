@@ -8,6 +8,7 @@ export interface Country {
     id: string;
     name: string;
     targetScore: number;
+    currentScore: number;
     scores: Year[];
 }
 
