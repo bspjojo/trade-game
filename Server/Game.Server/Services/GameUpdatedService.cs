@@ -6,7 +6,7 @@ namespace Game.Server.Services
 {
     public interface IGameUpdatedService
     {
-        void GameUpdated(string gameId);
+        Task GameUpdated(string gameId);
     }
 
     public class GameUpdatedService : IGameUpdatedService
@@ -20,7 +20,7 @@ namespace Game.Server.Services
             _gameHubService = gameHubService;
         }
 
-        public async void GameUpdated(string gameId)
+        public async Task GameUpdated(string gameId)
         {
             var scores = await _gameDataService.GetGameScores(gameId);
 
