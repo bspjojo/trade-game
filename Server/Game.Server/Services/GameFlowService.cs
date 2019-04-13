@@ -13,14 +13,12 @@ namespace Game.Server.Services
     public class GameFlowService : IGameFlowService
     {
         private readonly IGameDataService _gameDataService;
-        private readonly IGameHubService _gameHubService;
         private readonly IGameScoreService _gameScoreService;
         private readonly IGameUpdatedService _gameUpdatedService;
 
-        public GameFlowService(IGameDataService gameDataService, IGameHubService gameHubService, IGameScoreService gameScoreService, IGameUpdatedService gameUpdatedService)
+        public GameFlowService(IGameDataService gameDataService, IGameScoreService gameScoreService, IGameUpdatedService gameUpdatedService)
         {
             _gameDataService = gameDataService;
-            _gameHubService = gameHubService;
             _gameScoreService = gameScoreService;
             _gameUpdatedService = gameUpdatedService;
         }

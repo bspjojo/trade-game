@@ -10,45 +10,36 @@ namespace Game.Server.Test.Services
 {
     public class GameHubServiceTests
     {
-        private readonly GameHubService _gameHubService;
-        private readonly Mock<IHubClients<IGameHub>> _mockHubClients;
-        private readonly Mock<IGameHub> _gameHub;
+        private Mock<IHubContext<GameHub, IGameHub>> _mockGameHubContext;
+        private GameHubService _gameHubService;
+
+        private GameScoresBroadcastModel _broadcastmodel;
 
         public GameHubServiceTests()
         {
-            _gameHub = new Mock<IGameHub>();
-            _gameHub.Setup(m => m.ScoresUpdated(It.IsAny<ScoreUpdatedBroadcastModel>()))
+            _broadcastmodel = new GameScoresBroadcastModel();
+            var gameHub = new Mock<IGameHub>();
+            gameHub.Setup(m => m.ScoresUpdated(_broadcastmodel))
                 .Returns(Task.CompletedTask);
 
-            _mockHubClients = new Mock<IHubClients<IGameHub>>();
-            _mockHubClients.Setup(m => m.Group(It.IsAny<string>()))
-                .Returns(_gameHub.Object);
+            var mockHubClients = new Mock<IHubClients<IGameHub>>();
+            mockHubClients.Setup(m => m.Group("game"))
+                .Returns(gameHub.Object);
 
             var mockHubContext = new Mock<IHubContext<GameHub, IGameHub>>();
             mockHubContext.SetupGet(m => m.Clients)
-                .Returns(_mockHubClients.Object);
+                .Returns(mockHubClients.Object);
 
-            _gameHubService = new GameHubService(mockHubContext.Object);
+            _mockGameHubContext = new Mock<IHubContext<GameHub, IGameHub>>();
+            _mockGameHubContext.Setup(m => m.Clients).Returns(() => mockHubClients.Object);
+
+            _gameHubService = new GameHubService(_mockGameHubContext.Object);
         }
 
         [Fact]
-        public async void ScoresUpdated_ShouldUseGroupMatchingTheGameId()
+        public void ScoresUpdated_ShouldCallScoresUpdatedForTheGroupForTheGameId()
         {
-            var scores = new ConsumptionResources();
-
-            await _gameHubService.ScoresUpdated("gameId", "countryId", 2, scores);
-
-            _mockHubClients.Verify(m => m.Group("gameId"));
-        }
-
-        [Fact]
-        public async void ScoresUpdated_ShouldSendAScoreUpdatedBroadcastModelWith_CountryIdYearAndScores()
-        {
-            var scores = new ConsumptionResources();
-
-            await _gameHubService.ScoresUpdated("gameId", "countryId", 2, scores);
-
-            _gameHub.Verify(m => m.ScoresUpdated(It.Is<ScoreUpdatedBroadcastModel>(v => v.Year == 2 && v.Scores == scores && v.CountryId == "countryId")));
+            Assert.Equal(Task.CompletedTask, _gameHubService.ScoresUpdated("game", _broadcastmodel));
         }
     }
 }
