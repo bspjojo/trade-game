@@ -274,5 +274,92 @@ namespace Game.Server.DataRepositories
                 connection.Close();
             }
         }
+
+        public async Task<GameScoresBroadcastModel> GetGameScores(string gameId)
+        {
+            var queryGameScoresSql = @"SELECT GameCountries.ID as GameCountryId
+                                    , ScenarioCountries.Name
+                                    , ScenarioCountries.TargetScore
+                                    , CountryYearScores.Year
+                                    , Scenarios.Duration
+                                    , CountryYearScores.Meat
+                                    , CountryYearScores.Grain
+                                    , CountryYearScores.Chocolate
+                                    , CountryYearScores.Textiles
+                                    , CountryYearScores.Energy
+                                FROM dbo.Game_Countries AS GameCountries
+                                    LEFT JOIN dbo.Scenario_Countries AS ScenarioCountries
+                                    ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
+                                    LEFT JOIN dbo.Scenarios AS Scenarios
+                                    ON Scenarios.ID = ScenarioCountries.ScenarioID
+                                    INNER JOIN dbo.Game_Country_Year_Score AS CountryYearScores ON CountryYearScores.GameCountryID = GameCountries.ID
+                                WHERE GameID = @GameId
+                                ORDER BY CountryYearScores.Year DESC, ScenarioCountries.Name";
+
+            IEnumerable<GameCountryScoresDAO> result = null;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                result = await connection.QueryAsync<GameCountryScoresDAO>(queryGameScoresSql, new
+                {
+                    GameId = gameId
+                });
+
+                connection.Close();
+            }
+
+            var countryDictionary = new Dictionary<string, ScenarioCountry>();
+
+            var duration = 0;
+
+            foreach (var r in result)
+            {
+                ScenarioCountry scenarioCountry;
+                duration = r.Duration;
+
+                if (!countryDictionary.TryGetValue(r.GameCountryId.ToString(), out scenarioCountry))
+                {
+                    scenarioCountry = new ScenarioCountry
+                    {
+                        Id = r.GameCountryId,
+                        TargetScore = r.TargetScore,
+                        CurrentScore = 0,
+                        Name = r.Name,
+                        Scores = new List<ConsumptionResourcesForAYear>()
+                    };
+
+                    countryDictionary[r.GameCountryId.ToString()] = scenarioCountry;
+                }
+
+                var t = new ConsumptionResourcesForAYear
+                {
+                    Year = r.Year,
+                    Meat = r.Meat,
+                    Chocolate = r.Chocolate,
+                    Grain = r.Grain,
+                    Energy = r.Energy,
+                    Textiles = r.Textiles,
+                    Score = r.Meat + r.Chocolate + r.Grain + r.Energy + r.Textiles
+                };
+
+                scenarioCountry.CurrentScore += t.Score;
+                scenarioCountry.Scores.Add(t);
+            }
+
+            foreach (var item in countryDictionary.Values)
+            {
+                item.Scores = item.Scores.OrderBy(v => v.Year).ToList();
+            }
+
+            var bm = new GameScoresBroadcastModel
+            {
+                Id = Guid.Parse(gameId),
+                Duration = duration,
+                Countries = countryDictionary.Values.ToList()
+            };
+
+            return bm;
+        }
     }
 }

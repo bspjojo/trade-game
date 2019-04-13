@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JoinGameModule } from './pages/join-game/join-game.module';
+import { SummaryViewModule } from './pages/summary-view/summary-view.module';
+import { NavigationModule } from './navigation/navigation.module';
 
 @NgModule({
     declarations: [
@@ -11,8 +13,10 @@ import { JoinGameModule } from './pages/join-game/join-game.module';
     ],
     imports: [
         JoinGameModule,
+        SummaryViewModule,
         BrowserModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NavigationModule
     ],
     providers: [],
     bootstrap: [AppComponent]

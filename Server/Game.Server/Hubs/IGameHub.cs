@@ -5,6 +5,6 @@ namespace Game.Server.Hubs
 {
     public interface IGameHub
     {
-        Task ScoresUpdated(ScoreUpdatedBroadcastModel broadcastModel);
+        Task ScoresUpdated(GameScoresBroadcastModel broadcastModel);
     }
 }

@@ -4,7 +4,7 @@ import { GameSelectionService } from './game-selection.service';
 import { Subject } from 'rxjs';
 import { GameSelection } from './game-selection.model';
 import { FormControl } from '@angular/forms';
-import { GameService } from 'src/app/game-services/game-services.service';
+import { GameHubService } from 'src/app/game-services/game-hub.service';
 
 @Component({
     selector: 'watcher-join-game',
@@ -17,7 +17,7 @@ export class JoinGameComponent implements OnInit, OnDestroy {
 
     private ngUnsubscribe: Subject<void>;
 
-    constructor(private gameSelectionService: GameSelectionService, private gameService: GameService) {
+    constructor(private gameSelectionService: GameSelectionService, private gameService: GameHubService) {
         this.ngUnsubscribe = new Subject();
     }
 
@@ -27,7 +27,6 @@ export class JoinGameComponent implements OnInit, OnDestroy {
             let pGame = this.gameSelectionService.game;
             this.gameSelectionService.game = selectedGame;
 
-            console.log(this.gameService);
             if (pGame != null) {
                 this.gameService.leaveGame(pGame.id);
             }

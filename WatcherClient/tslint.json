@@ -61,6 +61,12 @@
             "single"
         ],
         "trailing-comma": false,
+        "typedef": [
+            true,
+            "call-signature",
+            "parameter",
+            "member-variable-declaration"
+        ],
         "no-output-on-prefix": true,
         "use-input-property-decorator": true,
         "use-output-property-decorator": true,

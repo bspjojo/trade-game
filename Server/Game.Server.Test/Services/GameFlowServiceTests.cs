@@ -10,78 +10,87 @@ namespace Game.Server.Test.Services
 {
     public class GameFlowServiceTests
     {
-        private Mock<IGameDataService> _mockIGameDataService;
-        private Mock<IGameHubService> _mockIGameHubService;
-        private Mock<IGameScoreService> _mockIGameScoreService;
+        private readonly Mock<IGameDataService> _mockGameDataService;
+        private readonly Mock<IGameScoreService> _mockGameScoreService;
+        private readonly Mock<IGameUpdatedService> _mockGameUpdatedService;
 
         private GameFlowService _gameFlowService;
 
-        private GameInformationResult _getGameInformationForACountryResult;
-        private ConsumptionResources _getBreakEvenForACountryResult;
-        private ConsumptionResources _getTargetsForACountryForAYearResult;
+        private ConsumptionResources _breakEven;
+        private ConsumptionResources _targetsForCurrentYear;
+        private ConsumptionResources _recorded;
         private ConsumptionResources _excess;
         private ConsumptionResources _scores;
         private ConsumptionResources _targets;
-        private ConsumptionResources _recorded;
-
 
         public GameFlowServiceTests()
         {
-            _getGameInformationForACountryResult = new GameInformationResult
+            _mockGameDataService = new Mock<IGameDataService>();
+            var gameInformation = new GameInformationResult
             {
-                Id = Guid.Parse("81a130d2-502f-4cf1-a376-63edeb000e9f"),
-                CurrentYear = 2
+                Id = Guid.Parse("7339670a-bf97-40dc-bb99-834b076768cc"),
+                CurrentYear = 4
             };
-            _getBreakEvenForACountryResult = new ConsumptionResources();
-            _getTargetsForACountryForAYearResult = new ConsumptionResources();
-            _excess = new ConsumptionResources();
-            _scores = new ConsumptionResources();
-            _targets = new ConsumptionResources();
+            _mockGameDataService.Setup(m => m.GetGameInformationForACountry("cId")).ReturnsAsync(() => gameInformation);
+            _mockGameDataService.Setup(m => m.SetCountryYearExcess("cId", 4, _excess)).Returns(Task.CompletedTask);
+            _mockGameDataService.Setup(m => m.SetCountryYearScores("cId", 4, _scores)).Returns(Task.CompletedTask);
+            _mockGameDataService.Setup(m => m.SetCountryYearTargets("cId", 5, _targets)).Returns(Task.CompletedTask);
+
+            _breakEven = new ConsumptionResources();
+            _mockGameDataService.Setup(m => m.GetBreakEvenForACountry("cId")).ReturnsAsync(() => _breakEven);
+
+            _targetsForCurrentYear = new ConsumptionResources();
+            _mockGameDataService.Setup(m => m.GetTargetsForACountryForAYear("cId", 4)).ReturnsAsync(() => _targetsForCurrentYear);
+
+            _mockGameScoreService = new Mock<IGameScoreService>();
             _recorded = new ConsumptionResources();
+            _mockGameScoreService.Setup(m => m.CalculateYearValues(_breakEven, _targetsForCurrentYear, _recorded, out _excess, out _scores, out _targets));
+            _mockGameUpdatedService = new Mock<IGameUpdatedService>();
+            _mockGameUpdatedService.Setup(m => m.GameUpdated(It.IsAny<string>()));
 
-            _mockIGameDataService = new Mock<IGameDataService>();
-            _mockIGameDataService.Setup(m => m.GetGameInformationForACountry("cId")).ReturnsAsync(() => _getGameInformationForACountryResult);
-            _mockIGameDataService.Setup(m => m.GetBreakEvenForACountry("cId")).ReturnsAsync(() => _getBreakEvenForACountryResult);
-            _mockIGameDataService.Setup(m => m.GetTargetsForACountryForAYear("cId", 2)).ReturnsAsync(() => _getTargetsForACountryForAYearResult);
-            _mockIGameDataService.Setup(m => m.SetCountryYearExcess("cId", 2, _excess)).Returns(() => Task.CompletedTask);
-            _mockIGameDataService.Setup(m => m.SetCountryYearScores("cId", 2, _scores)).Returns(() => Task.CompletedTask);
-            _mockIGameDataService.Setup(m => m.SetCountryYearTargets("cId", 3, _targets)).Returns(() => Task.CompletedTask);
-
-            _mockIGameScoreService = new Mock<IGameScoreService>();
-            _mockIGameScoreService.Setup(m => m.CalculateYearValues(_getBreakEvenForACountryResult, _getTargetsForACountryForAYearResult, _recorded, out _excess, out _scores, out _targets));
-
-            _mockIGameHubService = new Mock<IGameHubService>();
-            _mockIGameHubService.Setup(m => m.ScoresUpdated("81a130d2-502f-4cf1-a376-63edeb000e9f", "cId", 2, _scores)).Returns(() => Task.CompletedTask);
-
-            _gameFlowService = new GameFlowService(_mockIGameDataService.Object, _mockIGameHubService.Object, _mockIGameScoreService.Object);
+            _gameFlowService = new GameFlowService(_mockGameDataService.Object, _mockGameScoreService.Object, _mockGameUpdatedService.Object);
         }
 
         [Fact]
-        public async void ExecuteUpdateScoreFlow_Should_BroadCastTheScoresToTheGameHub()
-        {
-            await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
-
-            _mockIGameHubService.Verify(m => m.ScoresUpdated("81a130d2-502f-4cf1-a376-63edeb000e9f", "cId", 2, _scores));
-        }
-
-        [Fact]
-        public async void ExecuteUpdateScoreFlow_Should_ReturnTheScoringInformation()
+        public async void ExecuteUpdateScoreFlow_ShouldSetTheCountryYearExcess()
         {
             var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
 
-            Assert.Same(_excess, res.Excess);
-            Assert.Same(_scores, res.Scores);
-            Assert.Same(_targets, res.NextYearTarget);
+            _mockGameDataService.Setup(m => m.SetCountryYearExcess("cId", 4, _excess));
         }
 
         [Fact]
-        public async void ExecuteUpdateScoreFlow_Should_UpdateTheDatabaseValues()
+        public async void ExecuteUpdateScoreFlow_ShouldSetTheCountryYearScores()
         {
             var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
 
-            _mockIGameDataService.Verify(m => m.SetCountryYearExcess("cId", 2, _excess));
-            _mockIGameDataService.Verify(m => m.SetCountryYearScores("cId", 2, _scores));
-            _mockIGameDataService.Verify(m => m.SetCountryYearTargets("cId", 3, _targets));
+            _mockGameDataService.Setup(m => m.SetCountryYearScores("cId", 4, _scores));
+        }
+
+        [Fact]
+        public async void ExecuteUpdateScoreFlow_ShouldSetTheCountryYearTargets()
+        {
+            var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
+
+            _mockGameDataService.Setup(m => m.SetCountryYearTargets("cId", 5, _targets));
+        }
+
+        [Fact]
+        public async void ExecuteUpdateScoreFlow_ShouldCallGameUpdatedService_GameUpdatedWithTheGameId()
+        {
+            var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
+
+            _mockGameUpdatedService.Setup(m => m.GameUpdated("7339670a-bf97-40dc-bb99-834b076768cc"));
+        }
+
+        [Fact]
+        public async void ExecuteUpdateScoreFlow_ShouldReturnTheNextYearTarget_Excess_Score()
+        {
+            var res = await _gameFlowService.ExecuteUpdateScoreFlow("cId", _recorded);
+
+            Assert.Equal(_targets, res.NextYearTarget);
+            Assert.Equal(_excess, res.Excess);
+            Assert.Equal(_scores, res.Scores);
         }
     }
 }
