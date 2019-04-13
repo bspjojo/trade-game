@@ -1,0 +1,35 @@
+<table *ngIf="game != null">
+    <caption>
+        Game
+    </caption>
+    <thead>
+        <tr>
+            <th rowspan="2">Name</th>
+            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" colspan="5">Year {{n}}
+            </th>
+            <th rowspan="2">Target</th>
+            <th rowspan="2">Score</th>
+        </tr>
+        <tr>
+            <th>chocolate</th>
+            <th>energy</th>
+            <th>grain</th>
+            <th>textiles</th>
+            <th>score</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let country of game.countries">
+            <td>{{country.name}}</td>
+            <ng-container *ngFor="let n of game.duration | timesRepeat">
+                <td>{{country.scores[n]?.chocolate}}</td>
+                <td>{{country.scores[n]?.energy}}</td>
+                <td>{{country.scores[n]?.grain}}</td>
+                <td>{{country.scores[n]?.textiles}}</td>
+                <td>{{country.scores[n]?.score}}</td>
+            </ng-container>
+            <td>{{country.targetScore}}</td>
+            <td>{{country.currentScore}}</td>
+        </tr>
+    </tbody>
+</table>
