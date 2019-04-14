@@ -50,5 +50,12 @@ namespace Game.Server.Controllers
         {
             return _gameDataService.GetListOfCountriesInGame(gameId);
         }
+
+        [HttpGet]
+        [Route("{gameId}")]
+        public Task<GameScoresBroadcastModel> Scores(string gameId)
+        {
+            return _gameDataService.GetGameScores(gameId);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace Game.Server.Test.Controllers
         private ScoreServiceResult _executeUpdateScoreFlowResponse;
         private List<GameSearchResult> _gameSearchResults;
         private List<CountrySearchResult> _countrySearchResults;
+        private GameScoresBroadcastModel _gameBroadcastModel;
 
         public GameControllerTests()
         {
@@ -29,9 +30,11 @@ namespace Game.Server.Test.Controllers
                 .ReturnsAsync(() => _executeUpdateScoreFlowResponse);
 
             _gameSearchResults = new List<GameSearchResult>();
+            _gameBroadcastModel = new GameScoresBroadcastModel();
             _mockIGameDataService = new Mock<IGameDataService>();
-            _mockIGameDataService.Setup(m => m.GetListOfActiveGames()).ReturnsAsync(_gameSearchResults);
-            _mockIGameDataService.Setup(m => m.GetListOfCountriesInGame(It.IsAny<Guid>())).ReturnsAsync(_countrySearchResults);
+            _mockIGameDataService.Setup(m => m.GetListOfActiveGames()).ReturnsAsync(() => _gameSearchResults);
+            _mockIGameDataService.Setup(m => m.GetListOfCountriesInGame(It.IsAny<Guid>())).ReturnsAsync(() => _countrySearchResults);
+            _mockIGameDataService.Setup(m => m.GetGameScores("gameId")).ReturnsAsync(() => _gameBroadcastModel);
 
             _executeUpdateScoreFlowResponse = new ScoreServiceResult
             {
@@ -100,6 +103,18 @@ namespace Game.Server.Test.Controllers
             _mockIGameDataService.Setup(m => m.GetListOfCountriesInGame(guid));
 
             Assert.Same(_countrySearchResults, response);
+        }
+
+        #endregion
+
+        #region Scores
+
+        [Fact]
+        public async Task Scores_ShouldReturnTheResultFromGameDataService_GetGameScores()
+        {
+            var response = await _controller.Scores("gameId");
+
+            Assert.Same(_gameBroadcastModel, response);
         }
 
         #endregion

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameHubService } from './game-hub.service';
 import { GameDataService } from './game-data.service';
+import { GameApiService } from './game-api.service';
 
 @NgModule({
     declarations: [],
@@ -10,7 +11,8 @@ import { GameDataService } from './game-data.service';
     ],
     providers: [
         GameHubService,
-        GameDataService
+        GameDataService,
+        GameApiService
     ],
     exports: []
 })
