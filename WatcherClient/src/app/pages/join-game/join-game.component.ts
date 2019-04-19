@@ -1,11 +1,12 @@
-import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GameSelectionService } from './game-selection.service';
-import { Subject } from 'rxjs';
-import { GameSelection } from './game-selection.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { GameHubService } from 'src/app/game-services/game-hub.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { GameApiService } from 'src/app/game-services/game-api.service';
+import { GameHubService } from 'src/app/game-services/game-hub.service';
+
+import { GameSelection } from './game-selection.model';
+import { GameSelectionService } from './game-selection.service';
 
 @Component({
     selector: 'watcher-join-game',
@@ -38,8 +39,8 @@ export class JoinGameComponent implements OnInit, OnDestroy {
             if (pGame != null) {
                 this.gameService.leaveGame(pGame.id);
             }
-            this.gameService.joinGame(selectedGame);
-            this.gameApiService.setGameScores(selectedGame);
+            this.gameService.joinGame(selectedGame.id);
+            this.gameApiService.setGameScores(selectedGame.id);
         });
 
         this.games = [];
