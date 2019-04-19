@@ -1,27 +1,28 @@
-<div class="nav-container">
+<div class="nav-container" #navContainer>
     <div [ngClass]="{expanded: isExpanded, minimized: !isExpanded}">
         <div class="header link-item" (click)="toggleExpanded()">
             <p>
                 <span class="gt">&gt;</span>
                 <span class="lt">&lt;</span>
+                <span>&nbsp;</span>
                 <span class="menu-text">Menu</span>
             </p>
         </div>
         <div class="link-item" [routerLink]="['/']">
             <p>
-                <span>&gt;</span>
-                <span class="menu-text">Game Management</span>
+                <span>&gt;&nbsp;</span>
+                <span class="menu-text">Game</span>
             </p>
         </div>
         <div class="link-item" [routerLink]="['scores', 'summary']">
             <p>
-                <span>&gt;</span>
+                <span>&gt;&nbsp;</span>
                 <span class="menu-text">Summary</span>
             </p>
         </div>
         <div class="link-item" [routerLink]="['scores', 'detailed']">
             <p>
-                <span>&gt;</span>
+                <span>&gt;&nbsp;</span>
                 <span class="menu-text">Details</span>
             </p>
         </div>
