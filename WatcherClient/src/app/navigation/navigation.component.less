@@ -1,0 +1,45 @@
+.nav-container {
+    position: fixed;
+    top: 0;
+    background-color: darkgray;
+    height: 100vh;
+
+    .menu-text {
+        display: inline-block;
+    }
+
+    .link-item {
+        p {
+            margin: 5px;
+            font-size: 20px;
+            font-family: Candara;
+        }
+    }
+
+    .minimized {
+        .lt {
+            display: none;
+        }
+
+        .link-item {
+            p {
+                .menu-text {
+                    width: 25px;
+                    visibility: hidden;
+                }
+
+                .menu-text:first-letter {
+                    visibility: visible;
+                }
+            }
+        }
+    }
+
+    .expanded {
+        width: 120px; //todo move to toggle
+
+        .gt {
+            display: none;
+        }
+    }
+}

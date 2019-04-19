@@ -1,11 +1,12 @@
-import { takeUntil } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GameSelectionService } from './game-selection.service';
-import { Subject } from 'rxjs';
-import { GameSelection } from './game-selection.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { GameHubService } from 'src/app/game-services/game-hub.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { GameApiService } from 'src/app/game-services/game-api.service';
+import { GameHubService } from 'src/app/game-services/game-hub.service';
+
+import { GameSelection } from './game-selection.model';
+import { GameSelectionService } from './game-selection.service';
 
 @Component({
     selector: 'watcher-join-game',
@@ -15,6 +16,7 @@ import { GameApiService } from 'src/app/game-services/game-api.service';
 export class JoinGameComponent implements OnInit, OnDestroy {
     public games: GameSelection[];
     public gameSelectionControl: FormControl;
+    public selectedGame: GameSelection;
 
     private ngUnsubscribe: Subject<void>;
 
@@ -24,16 +26,21 @@ export class JoinGameComponent implements OnInit, OnDestroy {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.gameSelectionControl = new FormControl(this.gameSelectionService.game);
-        this.gameSelectionControl.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((selectedGame: GameSelection) => {
+        let game = this.gameSelectionService.game;
+        this.selectedGame = game;
+
+        let gameId = game != null ? game.id : null;
+        this.gameSelectionControl = new FormControl(gameId);
+        this.gameSelectionControl.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe((selectedGame: string) => {
             let pGame = this.gameSelectionService.game;
-            this.gameSelectionService.game = selectedGame;
+            this.selectedGame = this.games.find(v => v.id === selectedGame);
+            this.gameSelectionService.game = this.selectedGame;
 
             if (pGame != null) {
                 this.gameService.leaveGame(pGame.id);
             }
-            this.gameService.joinGame(selectedGame.id);
-            this.gameApiService.setGameScores(selectedGame.id);
+            this.gameService.joinGame(selectedGame);
+            this.gameApiService.setGameScores(selectedGame);
         });
 
         this.games = [];
