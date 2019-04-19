@@ -1,6 +1,6 @@
 <div class="nav">
-    <watcher-navigation></watcher-navigation>
+    <watcher-navigation (width)="navWidth = $event"></watcher-navigation>
 </div>
-<div class="outlet">
+<div class="outlet" [ngStyle]="{'left.px': navWidth}">
     <router-outlet></router-outlet>
 </div>
