@@ -39,8 +39,8 @@ export class JoinGameComponent implements OnInit, OnDestroy {
             if (pGame != null) {
                 this.gameService.leaveGame(pGame.id);
             }
-            this.gameService.joinGame(selectedGame.id);
-            this.gameApiService.setGameScores(selectedGame.id);
+            this.gameService.joinGame(selectedGame);
+            this.gameApiService.setGameScores(selectedGame);
         });
 
         this.games = [];
