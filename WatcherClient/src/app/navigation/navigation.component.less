@@ -3,5 +3,29 @@
     top: 0;
     background-color: darkgray;
     height: 100vh;
-    width: 250px;
+    width: 250px; //todo move to toggle
+
+    .menu-text {
+        display: inline-block;
+    }
+
+    .minimized {
+        .lt {
+            display: none;
+        }
+
+        .menu-text {
+            visibility: hidden;
+        }
+
+        .menu-text:first-letter {
+            visibility: visible;
+        }
+    }
+
+    .expanded {
+        .gt {
+            display: none;
+        }
+    }
 }

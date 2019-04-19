@@ -6,9 +6,13 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./navigation.component.less']
 })
 export class NavigationComponent implements OnInit {
-
-    constructor() { }
+    public isExpanded: boolean;
 
     public ngOnInit(): void {
+        this.isExpanded = true;
+    }
+
+    public toggleExpanded(): void {
+        this.isExpanded = !this.isExpanded;
     }
 }

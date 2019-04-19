@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
-import { NavigationComponent } from './navigation.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+
+import { NavigationComponent } from './navigation.component';
 
 @NgModule({
     declarations: [
@@ -10,6 +12,7 @@ import { RouterModule } from '@angular/router';
         NavigationComponent
     ],
     imports: [
+        BrowserModule,
         RouterModule
     ]
 })
