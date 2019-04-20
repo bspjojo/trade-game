@@ -281,7 +281,6 @@ namespace Game.Server.DataRepositories
                                     , ScenarioCountries.Name
                                     , ScenarioCountries.TargetScore
                                     , CountryYearScores.Year
-                                    , Scenarios.Duration
                                     , CountryYearScores.Meat
                                     , CountryYearScores.Grain
                                     , CountryYearScores.Chocolate
@@ -290,18 +289,30 @@ namespace Game.Server.DataRepositories
                                 FROM dbo.Game_Countries AS GameCountries
                                     LEFT JOIN dbo.Scenario_Countries AS ScenarioCountries
                                     ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
-                                    LEFT JOIN dbo.Scenarios AS Scenarios
-                                    ON Scenarios.ID = ScenarioCountries.ScenarioID
                                     INNER JOIN dbo.Game_Country_Year_Score AS CountryYearScores ON CountryYearScores.GameCountryID = GameCountries.ID
                                 WHERE GameID = @GameId
                                 ORDER BY CountryYearScores.Year DESC, ScenarioCountries.Name";
 
-            IEnumerable<GameCountryScoresDAO> result = null;
+            var gameInfoSql = @"SELECT Game.Name
+                                , Game.CurrentYear
+                                , Scenario.Duration
+                                FROM games AS Game
+                                    LEFT JOIN dbo.Scenarios AS Scenario
+                                    ON Scenario.ID = Game.ScenarioId
+                                WHERE Game.ID = @GameID";
+
+            IEnumerable<GameCountryScoresDAO> scoresResult = null;
+            GameDAO gameResult = null;
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                result = await connection.QueryAsync<GameCountryScoresDAO>(queryGameScoresSql, new
+                scoresResult = await connection.QueryAsync<GameCountryScoresDAO>(queryGameScoresSql, new
+                {
+                    GameId = gameId
+                });
+
+                gameResult = await connection.QueryFirstAsync<GameDAO>(gameInfoSql, new
                 {
                     GameId = gameId
                 });
@@ -311,12 +322,9 @@ namespace Game.Server.DataRepositories
 
             var countryDictionary = new Dictionary<string, ScenarioCountry>();
 
-            var duration = 0;
-
-            foreach (var r in result)
+            foreach (var r in scoresResult)
             {
                 ScenarioCountry scenarioCountry;
-                duration = r.Duration;
 
                 if (!countryDictionary.TryGetValue(r.GameCountryId.ToString(), out scenarioCountry))
                 {
@@ -355,7 +363,9 @@ namespace Game.Server.DataRepositories
             var bm = new GameScoresBroadcastModel
             {
                 Id = Guid.Parse(gameId),
-                Duration = duration,
+                Duration = gameResult.Duration,
+                Name = gameResult.Name,
+                CurrentYear = gameResult.CurrentYear,
                 Countries = countryDictionary.Values.ToList()
             };
 

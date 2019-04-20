@@ -7,7 +7,9 @@ namespace Game.Server.Services.Models
     {
         public Guid Id { get; set; }
         public int Duration { get; set; }
+        public int CurrentYear { get; set; }
         public List<ScenarioCountry> Countries { get; set; }
+        public string Name { get; set; }
     }
 
     public class ScenarioCountry
