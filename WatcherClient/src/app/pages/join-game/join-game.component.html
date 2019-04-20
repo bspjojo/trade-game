@@ -1,6 +1,11 @@
-<select id="game" [formControl]="gameSelectionControl">
-    <option *ngFor="let g of games" [ngValue]="g.id">{{ g.name }}</option>
-</select>
+<h4>Select a game</h4>
+<mat-form-field>
+    <mat-label>Game</mat-label>
+    <mat-select [formControl]="gameSelectionControl">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let g of games" [value]="g.id">{{g.name}}</mat-option>
+    </mat-select>
+</mat-form-field>
 
 <ng-container *ngIf="gameSelectionControl.value != null">
     <p>Selected game: {{selectedGame?.name}}</p>
