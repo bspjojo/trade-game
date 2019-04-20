@@ -7,6 +7,16 @@
     </mat-select>
 </mat-form-field>
 
-<ng-container *ngIf="gameSelectionControl.value != null">
-    <p>Selected game: {{selectedGame?.name}}</p>
+<ng-container *ngIf="game != null">
+
+    <h4>Set game year</h4>
+    <mat-form-field>
+        <mat-label>Year</mat-label>
+        <mat-select [formControl]="gameYearControl">
+            <mat-option *ngFor="let n of game.duration | timesRepeat:1;" [value]="n">Year {{n}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <p>Selected game: {{game.name}}</p>
+    <p>Current year: {{game.currentYear}}</p>
 </ng-container>
