@@ -1,39 +1,42 @@
 <table *ngIf="game != null">
     <caption>
-        Game
+        <h4>{{game.name}}</h4>
     </caption>
     <thead>
         <tr>
-            <th rowspan="2">Name</th>
-            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" colspan="6">Year {{n}}
+            <th class="nameCol" rowspan="2">Name</th>
+            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" class="yearStart yearEnd" colspan="6">Year
+                {{n}}
             </th>
-            <th rowspan="2">Target</th>
-            <th rowspan="2">Score</th>
+            <th class="targetScoreCol" rowspan="2">Target</th>
+            <th class="currentScoreCol" rowspan="2">Score</th>
         </tr>
         <tr>
             <ng-container *ngFor="let n of game.duration | timesRepeat">
-                <th>C</th>
+                <th class="yearStart">C</th>
                 <th>E</th>
                 <th>G</th>
                 <th>T</th>
                 <th>M</th>
-                <th>score</th>
+                <th class="yearEnd">score</th>
             </ng-container>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let country of game.countries">
-            <td>{{country.name}}</td>
+            <td class="nameCol">{{country.name}}</td>
             <ng-container *ngFor="let n of game.duration | timesRepeat">
-                <td>{{country.scores[n]?.chocolate}}</td>
+                <td class="yearStart">{{country.scores[n]?.chocolate}}</td>
                 <td>{{country.scores[n]?.energy}}</td>
                 <td>{{country.scores[n]?.grain}}</td>
                 <td>{{country.scores[n]?.textiles}}</td>
                 <td>{{country.scores[n]?.meat}}</td>
-                <td>{{country.scores[n]?.score}}</td>
+                <td class="yearEnd">{{country.scores[n]?.score}}</td>
             </ng-container>
-            <td>{{country.targetScore}}</td>
-            <td>{{country.currentScore}}</td>
+            <td class="targetScoreCol">{{country.targetScore}}</td>
+            <td class="currentScoreCol"
+                [ngClass]="country.currentScore > country.targetScore ? 'above-score' : 'below-score'">
+                {{country.currentScore}}</td>
         </tr>
     </tbody>
 </table>
