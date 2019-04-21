@@ -371,5 +371,25 @@ namespace Game.Server.DataRepositories
 
             return bm;
         }
+
+        public async Task UpdateCurrentYearForGame(string gameId, int year)
+        {
+            var updateYearSql = @"UPDATE Games
+                                  SET CurrentYear = @NewYear
+                                  WHERE Games.ID = @GameID";
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                await connection.ExecuteAsync(updateYearSql, new
+                {
+                    NewYear = year,
+                    GameID = gameId
+                });
+
+                connection.Close();
+            }
+        }
     }
 }
