@@ -57,5 +57,11 @@ namespace Game.Server.Controllers
         {
             return _gameDataService.GetGameScores(gameId);
         }
+
+        [HttpPost]
+        public Task UpdateGameYear([FromBody] UpdateYear updateInformation)
+        {
+            return _gameFlowService.UpdateGameYear(updateInformation);
+        }
     }
 }

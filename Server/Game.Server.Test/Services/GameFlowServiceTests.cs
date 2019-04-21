@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Game.Server.DataRepositories;
+using Game.Server.Models;
 using Game.Server.Services;
 using Game.Server.Services.Models;
 using Moq;
@@ -51,6 +52,8 @@ namespace Game.Server.Test.Services
             _gameFlowService = new GameFlowService(_mockGameDataService.Object, _mockGameScoreService.Object, _mockGameUpdatedService.Object);
         }
 
+        #region ExecuteUpdateScoreFlow
+
         [Fact]
         public async void ExecuteUpdateScoreFlow_ShouldSetTheCountryYearExcess()
         {
@@ -92,5 +95,25 @@ namespace Game.Server.Test.Services
             Assert.Equal(_excess, res.Excess);
             Assert.Equal(_scores, res.Scores);
         }
+
+        #endregion
+
+        #region UpdateGameYear
+
+        public async void UpdateGameYear_ShouldCallGameDataServiceToUpdateTheYearForAGame()
+        {
+            await _gameFlowService.UpdateGameYear(new UpdateYear { GameId = "gId", Year = 2 });
+
+            _mockGameDataService.Verify(m => m.UpdateCurrentYearForGame("gId", 2), Times.Once);
+        }
+
+        public async void UpdateGameYear_ShouldCallGameUpdatedServiceBroadcastTheGameHasUpdated()
+        {
+            await _gameFlowService.UpdateGameYear(new UpdateYear { GameId = "gId", Year = 2 });
+
+            _mockGameUpdatedService.Verify(m => m.GameUpdated("gId"), Times.Once);
+        }
+
+        #endregion
     }
 }

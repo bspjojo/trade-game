@@ -1,12 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { JoinGameModule } from './pages/join-game/join-game.module';
-import { SummaryViewModule } from './pages/summary-view/summary-view.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { DetailedViewModule } from './pages/detailed-view/detailed-view.module';
+import { JoinGameModule } from './pages/join-game/join-game.module';
+import { SummaryViewModule } from './pages/summary-view/summary-view.module';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { DetailedViewModule } from './pages/detailed-view/detailed-view.module';
         DetailedViewModule,
         BrowserModule,
         AppRoutingModule,
-        NavigationModule
+        NavigationModule,
+        NoopAnimationsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

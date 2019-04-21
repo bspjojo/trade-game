@@ -1,7 +1,9 @@
 export interface Game {
     id: string;
-    countries: Country[];
     duration: number;
+    currentYear: number;
+    name: string;
+    countries: Country[];
 }
 
 export interface Country {

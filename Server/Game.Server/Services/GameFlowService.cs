@@ -2,12 +2,14 @@ using System;
 using System.Threading.Tasks;
 using Game.Server.Services.Models;
 using Game.Server.DataRepositories;
+using Game.Server.Models;
 
 namespace Game.Server.Services
 {
     public interface IGameFlowService
     {
         Task<ScoreServiceResult> ExecuteUpdateScoreFlow(string countryId, ConsumptionResources consumptionResourcesRecorded);
+        Task UpdateGameYear(UpdateYear updateInformation);
     }
 
     public class GameFlowService : IGameFlowService
@@ -44,6 +46,12 @@ namespace Game.Server.Services
                 Excess = currentYearExcess,
                 Scores = currentYearScores
             };
+        }
+
+        public async Task UpdateGameYear(UpdateYear updateInformation)
+        {
+            await _gameDataService.UpdateCurrentYearForGame(updateInformation.GameId, updateInformation.Year);
+            _gameUpdatedService.GameUpdated(updateInformation.GameId);
         }
     }
 }

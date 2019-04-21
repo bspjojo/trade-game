@@ -5,17 +5,20 @@
     <thead>
         <tr>
             <th rowspan="2">Name</th>
-            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" colspan="5">Year {{n}}
+            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" colspan="6">Year {{n}}
             </th>
             <th rowspan="2">Target</th>
             <th rowspan="2">Score</th>
         </tr>
         <tr>
-            <th>chocolate</th>
-            <th>energy</th>
-            <th>grain</th>
-            <th>textiles</th>
-            <th>score</th>
+            <ng-container *ngFor="let n of game.duration | timesRepeat">
+                <th>C</th>
+                <th>E</th>
+                <th>G</th>
+                <th>T</th>
+                <th>M</th>
+                <th>score</th>
+            </ng-container>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +29,7 @@
                 <td>{{country.scores[n]?.energy}}</td>
                 <td>{{country.scores[n]?.grain}}</td>
                 <td>{{country.scores[n]?.textiles}}</td>
+                <td>{{country.scores[n]?.meat}}</td>
                 <td>{{country.scores[n]?.score}}</td>
             </ng-container>
             <td>{{country.targetScore}}</td>

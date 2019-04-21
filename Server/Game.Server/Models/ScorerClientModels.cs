@@ -10,6 +10,12 @@ namespace Game.Server.Models
         //public CountryYearProductionResources GrowthCertificatesPurchased { get; set; }
     }
 
+    public class UpdateYear
+    {
+        public string GameId { get; set; }
+        public int Year { get; set; }
+    }
+
     // Download
     public class ScorerClientScoreUpdateResponse
     {

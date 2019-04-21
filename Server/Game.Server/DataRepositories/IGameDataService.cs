@@ -17,5 +17,6 @@ namespace Game.Server.DataRepositories
         Task<IEnumerable<GameSearchResult>> GetListOfActiveGames();
         Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId);
         Task<GameScoresBroadcastModel> GetGameScores(string gameId);
+        Task UpdateCurrentYearForGame(string gameId, int year);
     }
 }

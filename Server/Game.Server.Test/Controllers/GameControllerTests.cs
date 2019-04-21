@@ -29,6 +29,9 @@ namespace Game.Server.Test.Controllers
                 .Setup(m => m.ExecuteUpdateScoreFlow(It.IsAny<string>(), It.IsAny<ConsumptionResources>()))
                 .ReturnsAsync(() => _executeUpdateScoreFlowResponse);
 
+            _mockIGameFlowService
+                .Setup(m => m.UpdateGameYear(It.IsAny<UpdateYear>())).Returns(Task.CompletedTask);
+
             _gameSearchResults = new List<GameSearchResult>();
             _gameBroadcastModel = new GameScoresBroadcastModel();
             _mockIGameDataService = new Mock<IGameDataService>();
@@ -115,6 +118,20 @@ namespace Game.Server.Test.Controllers
             var response = await _controller.Scores("gameId");
 
             Assert.Same(_gameBroadcastModel, response);
+        }
+
+        #endregion
+
+        #region UpdateGameYear
+
+        [Fact]
+        public async Task UpdateGameYear_ShouldCallGameFlowService_UpdateGameYearWithTheData()
+        {
+            var data = new UpdateYear();
+
+            await _controller.UpdateGameYear(data);
+
+            _mockIGameFlowService.Verify(m => m.UpdateGameYear(data), Times.Once);
         }
 
         #endregion
