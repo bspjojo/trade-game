@@ -48,7 +48,7 @@ export class JoinGameComponent implements OnInit, OnDestroy {
                 this.gameService.joinGame(selectedGameId);
             }
 
-            this.gameApiService.setGameScores(selectedGameId);
+            this.gameApiService.getGameScores(selectedGameId);
         });
 
         this.gameDataService.gameSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe((gameData: Game) => {
@@ -58,7 +58,7 @@ export class JoinGameComponent implements OnInit, OnDestroy {
             this.gameChangeSubject.next();
 
             this.gameYearControl.valueChanges.pipe(takeUntil(this.gameChangeSubject)).subscribe((year: number) => {
-                console.log(year);
+                this.gameApiService.setGameYear(this.game.id, year);
             });
         });
 
