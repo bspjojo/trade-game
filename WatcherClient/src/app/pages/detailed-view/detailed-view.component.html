@@ -1,40 +1,40 @@
-<table *ngIf="game != null">
-    <caption>
+<table *ngIf="game != null" class="detailed-scores">
+    <caption class="table-caption">
         <h4>{{game.name}}</h4>
     </caption>
-    <thead>
+    <thead class="table-head">
         <tr>
-            <th class="nameCol" rowspan="2">Name</th>
-            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" class="yearStart yearEnd" colspan="6">Year
+            <th class="name-col" rowspan="2">Name</th>
+            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" class="year-heading" colspan="6">Year
                 {{n}}
             </th>
-            <th class="targetScoreCol" rowspan="2">Target</th>
-            <th class="currentScoreCol" rowspan="2">Score</th>
+            <th class="target-score-col" rowspan="2">Target</th>
+            <th class="current-score-col" rowspan="2">Score</th>
         </tr>
         <tr>
             <ng-container *ngFor="let n of game.duration | timesRepeat">
-                <th class="yearStart">C</th>
-                <th>E</th>
-                <th>G</th>
-                <th>T</th>
-                <th>M</th>
-                <th class="yearEnd">score</th>
+                <th class="year-start resource-score">C</th>
+                <th class="resource-score">E</th>
+                <th class="resource-score">G</th>
+                <th class="resource-score">T</th>
+                <th class="resource-score">M</th>
+                <th class="year-score year-end">Score</th>
             </ng-container>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-body">
         <tr *ngFor="let country of game.countries">
-            <td class="nameCol">{{country.name}}</td>
+            <td class="name-col">{{country.name}}</td>
             <ng-container *ngFor="let n of game.duration | timesRepeat">
-                <td class="yearStart">{{country.scores[n]?.chocolate}}</td>
-                <td>{{country.scores[n]?.energy}}</td>
-                <td>{{country.scores[n]?.grain}}</td>
-                <td>{{country.scores[n]?.textiles}}</td>
-                <td>{{country.scores[n]?.meat}}</td>
-                <td class="yearEnd">{{country.scores[n]?.score}}</td>
+                <td class="year-start resource-score">{{country.scores[n]?.chocolate}}</td>
+                <td class="resource-score">{{country.scores[n]?.energy}}</td>
+                <td class="resource-score">{{country.scores[n]?.grain}}</td>
+                <td class="resource-score">{{country.scores[n]?.textiles}}</td>
+                <td class="resource-score">{{country.scores[n]?.meat}}</td>
+                <td class="year-score year-end">{{country.scores[n]?.score}}</td>
             </ng-container>
-            <td class="targetScoreCol">{{country.targetScore}}</td>
-            <td class="currentScoreCol"
+            <td class="target-score-col">{{country.targetScore}}</td>
+            <td class="current-score-col opacity"
                 [ngClass]="country.currentScore > country.targetScore ? 'above-score' : 'below-score'">
                 {{country.currentScore}}</td>
         </tr>
