@@ -1,21 +1,23 @@
-<table *ngIf="game != null">
-    <caption>
+<table *ngIf="game != null" class="scores-table">
+    <caption class="table-caption">
         <h4>Game</h4>
     </caption>
-    <thead>
+    <thead class="table-head">
         <tr>
-            <th>Name</th>
-            <th *ngFor="let n of game.duration | timesRepeat:1; index as i">Year {{n}}</th>
-            <th>Target</th>
-            <th>Score</th>
+            <th class="name-col">Name</th>
+            <th *ngFor="let n of game.duration | timesRepeat:1; index as i" class="year-heading">Year {{n}}</th>
+            <th class="target-score-col" rowspan="2">Target</th>
+            <th class="current-score-col" rowspan="2">Score</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-body">
         <tr *ngFor="let country of game.countries">
-            <td>{{country.name}}</td>
-            <td *ngFor="let n of game.duration | timesRepeat">{{country.scores[n]?.score}}</td>
-            <td>{{country.targetScore}}</td>
-            <td>{{country.currentScore}}</td>
+            <td class="name-col">{{country.name}}</td>
+            <td *ngFor="let n of game.duration | timesRepeat" class="year-score">{{country.scores[n]?.score}}</td>
+            <td class="target-score-col">{{country.targetScore}}</td>
+            <td class="current-score-col opacity"
+                [ngClass]="country.currentScore > country.targetScore ? 'above-score' : 'below-score'">
+                {{country.currentScore}}</td>
         </tr>
     </tbody>
 </table>
