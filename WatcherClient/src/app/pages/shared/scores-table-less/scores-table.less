@@ -1,0 +1,67 @@
+.scores-table {
+    border-collapse: collapse;
+    margin: auto;
+
+    .name-col {
+        border-right: 1px solid darkgray;
+    }
+
+    .target-score-col {
+        border-right: 1px solid darkgray;
+    }
+
+    .table-head {
+        tr {
+            border-bottom: 1px solid darkgray;
+
+            th {
+                text-align: center;
+            }
+
+            .name-col {
+                padding-right: 15px;
+            }
+        }
+    }
+
+    .table-body {
+        tr {
+            border-bottom: 1px solid lightgray;
+
+            .name-col {
+                padding-right: 15px;
+            }
+
+            .above-score {
+                margin-left: 2px;
+                margin-right: 2px;
+                border-left: 4px solid green;
+                border-right: 4px solid green;
+            }
+
+            .above-score.opacity {
+                background-color: rgb(100, 128, 100, 0.5)
+            }
+
+            .below-score {
+                margin-left: 2px;
+                margin-right: 2px;
+                border-left: 4px solid red;
+                border-right: 4px solid red;
+            }
+
+            .below-score.opacity {
+                background-color: rgb(128, 100, 100, 0.5)
+            }
+
+            .target-score-col,
+            .current-score-col {
+                text-align: center;
+            }
+
+            .year-score {
+                text-align: center;
+            }
+        }
+    }
+}

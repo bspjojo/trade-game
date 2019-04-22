@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GameDataService } from 'src/app/game-services/game-data.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Game } from 'src/app/game-services/game.model';
 import { takeUntil } from 'rxjs/operators';
+import { GameDataService } from 'src/app/game-services/game-data.service';
+import { Game } from 'src/app/game-services/game.model';
 
 @Component({
     selector: 'watcher-summary-view',
     templateUrl: './summary-view.component.html',
-    styleUrls: ['./summary-view.component.less']
+    styleUrls: ['./summary-view.component.less', './../shared/scores-table-less/scores-table.less']
 })
 export class SummaryViewComponent implements OnInit, OnDestroy {
     private ngUnsubscribe: Subject<void>;
