@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameHubService } from './game-hub.service';
-import { GameDataService } from './game-data.service';
+import { NgModule } from '@angular/core';
+
 import { GameApiService } from './game-api.service';
+import { GameDataService } from './game-data.service';
+import { GameHubService } from './game-hub.service';
 
 @NgModule({
     declarations: [],
