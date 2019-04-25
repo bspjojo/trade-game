@@ -5,6 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationModule } from './navigation/navigation.module';
+import { AdminModule } from './pages/admin/admin.module';
 import { DetailedViewModule } from './pages/detailed-view/detailed-view.module';
 import { JoinGameModule } from './pages/join-game/join-game.module';
 import { SummaryViewModule } from './pages/summary-view/summary-view.module';
@@ -20,7 +21,8 @@ import { SummaryViewModule } from './pages/summary-view/summary-view.module';
         BrowserModule,
         AppRoutingModule,
         NavigationModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        AdminModule
     ],
     providers: [],
     bootstrap: [AppComponent]
