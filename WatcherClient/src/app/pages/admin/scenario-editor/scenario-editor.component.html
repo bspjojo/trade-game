@@ -1,0 +1,30 @@
+<p>Select/create scenario</p>
+<button mat-button (click)="createScenario()">New scenario</button>
+
+<ng-container *ngIf="scenario != null">
+    <div class="form">
+        <mat-form-field class="form-input">
+            <input type="text" matInput placeholder="Scenario name">
+        </mat-form-field>
+
+        <mat-form-field class="form-input">
+            <input type="number" matInput placeholder="Scenario duration">
+        </mat-form-field>
+
+        <mat-form-field class="form-input">
+            <input type="text" matInput placeholder="Scenario author">
+        </mat-form-field>
+
+        <button mat-button (click)="addCountry()">Add country</button>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let country of scenario.countries">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{country.name}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <watcher-country-editor [country]="country"></watcher-country-editor>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</ng-container>
