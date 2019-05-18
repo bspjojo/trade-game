@@ -1,6 +1,7 @@
 export interface Scenario {
     id?: string;
     name?: string;
+    author?: string;
     duration?: number;
     countries: ScenarioCountry[];
 }

@@ -1,18 +1,19 @@
 <p>Select/create scenario</p>
 <button mat-button (click)="createScenario()">New scenario</button>
+<button mat-button (click)="save()">Save scenario</button>
 
-<ng-container *ngIf="scenario != null">
-    <div class="form">
+<ng-container *ngIf="scenario != null && !saving">
+    <div class="form" [formGroup]="scenarioFormGroup">
         <mat-form-field class="form-input">
-            <input type="text" matInput placeholder="Scenario name">
+            <input type="text" matInput placeholder="Scenario name" formControlName="name">
         </mat-form-field>
 
         <mat-form-field class="form-input">
-            <input type="number" matInput placeholder="Scenario duration">
+            <input type="number" matInput placeholder="Scenario duration" formControlName="duration">
         </mat-form-field>
 
         <mat-form-field class="form-input">
-            <input type="text" matInput placeholder="Scenario author">
+            <input type="text" matInput placeholder="Scenario author" formControlName="author">
         </mat-form-field>
 
         <button mat-button (click)="addCountry()">Add country</button>
@@ -27,4 +28,7 @@
             </mat-expansion-panel>
         </mat-accordion>
     </div>
+</ng-container>
+<ng-container *ngIf="saving">
+    Saving
 </ng-container>

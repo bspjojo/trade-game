@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Game.Server.DataRepositories;
 using Game.Server.Models;
 using Game.Server.Services;
-using Game.Server.DataRepositories;
 using Game.Server.Services.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Game.Server.Controllers
 {
