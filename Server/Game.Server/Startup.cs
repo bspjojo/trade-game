@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Game.Server.Models;
+using Game.Server.DataRepositories.SQL;
 
 namespace Game.Server
 {

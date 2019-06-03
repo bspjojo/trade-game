@@ -10,7 +10,7 @@ using Game.Server.Services.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Game.Server.DataRepositories
+namespace Game.Server.DataRepositories.SQL
 {
     public class SqlGameDataService : IGameDataService
     {
