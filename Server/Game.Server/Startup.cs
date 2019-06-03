@@ -38,7 +38,7 @@ namespace Game.Server
             services.AddSingleton<IGameUpdatedService, GameUpdatedService>();
 
             var corsConfig = Configuration.GetSection("Cors").Get<CorsConfig>();
-            services.Configure<GameConnection>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<DatabaseConnections>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddCors(o =>
                 o.AddPolicy("All",

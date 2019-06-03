@@ -1,7 +1,7 @@
 namespace Game.Server.Models
 {
-    public class GameConnection
+    public class DatabaseConnections
     {
-        public string GameDb { get; set; }
+        public string TradeGame { get; set; }
     }
 }

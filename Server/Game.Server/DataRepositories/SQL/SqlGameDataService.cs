@@ -17,10 +17,10 @@ namespace Game.Server.DataRepositories.SQL
         private readonly string _connectionString;
         public ILogger<SqlGameDataService> _logger { get; }
 
-        public SqlGameDataService(ILogger<SqlGameDataService> logger, IOptions<GameConnection> gameConnectionInformation)
+        public SqlGameDataService(ILogger<SqlGameDataService> logger, IOptions<DatabaseConnections> dataConnections)
         {
             _logger = logger;
-            _connectionString = gameConnectionInformation.Value.GameDb;
+            _connectionString = dataConnections.Value.TradeGame;
         }
 
         public async Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId)
