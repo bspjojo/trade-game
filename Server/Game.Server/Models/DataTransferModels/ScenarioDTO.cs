@@ -5,6 +5,7 @@ namespace Game.Server.Models.DataTransferModels
     public class ScenarioDTO
     {
         public string Id { get; set; }
+        public string Author { get; set; }
         public string Name { get; set; }
         public int Duration { get; set; }
         public IEnumerable<ScenarioCountry> Countries { get; set; }

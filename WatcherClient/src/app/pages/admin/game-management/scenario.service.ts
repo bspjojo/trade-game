@@ -5,7 +5,7 @@ import { ConfigService } from 'src/app/app-config/config.service';
 import { ScenarioSummary } from './scenario-summary';
 
 @Injectable()
-export class ListScenarioService {
+export class ScenarioService {
     constructor(private configService: ConfigService, private httpClient: HttpClient) { }
 
     public getScenarios(): Promise<ScenarioSummary[]> {

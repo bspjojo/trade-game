@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ListScenarioService } from './list-scenario.service';
 import { ScenarioSummary } from './scenario-summary';
+import { ScenarioService } from './scenario.service';
 
 @Component({
     selector: 'watcher-game-management',
@@ -11,14 +11,14 @@ import { ScenarioSummary } from './scenario-summary';
 export class GameManagementComponent implements OnInit {
     public scenarios: ScenarioSummary[];
 
-    constructor(private listScenarioService: ListScenarioService) { }
+    constructor(private scenarioService: ScenarioService) { }
 
     public ngOnInit(): void {
         this.reloadScenarios();
     }
 
     public async reloadScenarios(): Promise<void> {
-        this.scenarios = await this.listScenarioService.getScenarios();
+        this.scenarios = await this.scenarioService.getScenarios();
     }
 
     public createGame(scenario: ScenarioSummary): void {

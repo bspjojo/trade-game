@@ -36,10 +36,10 @@ namespace Game.Server.DataRepositories.SQL
             var createScenarioSql = @"DECLARE @NewScenarioVar table(ID UNIQUEIDENTIFIER);
                                       
                                       INSERT INTO dbo.Scenarios
-                                          (Name,DateCreated,Duration)
+                                          (Name,DateCreated,Duration,Author)
                                           OUTPUT inserted.ID INTO @NewScenarioVar
                                       VALUES
-                                          (@Name, @DateCreated, @Duration)
+                                          (@Name, @DateCreated, @Duration, @Author)
                                       
                                       SELECT TOP 1
                                           ID
@@ -67,12 +67,14 @@ namespace Game.Server.DataRepositories.SQL
                 {
                     Name = scenarioIn.Name,
                     DateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
-                    Duration = scenarioIn.Duration
+                    Duration = scenarioIn.Duration,
+                    Author = scenarioIn.Author
                 });
 
                 scenarioOut.Id = scenarioId.ID.ToString();
                 scenarioOut.Name = scenarioIn.Name;
                 scenarioOut.Duration = scenarioIn.Duration;
+                scenarioOut.Author = scenarioIn.Author;
                 var outCountries = new List<ScenarioCountry>();
 
                 foreach (var country in scenarioIn.Countries)
