@@ -32,10 +32,14 @@ namespace Game.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IGameDataService, SqlGameDataService>();
+            services.AddSingleton<IScenarioDataService, SqlScenarioDataService>();
+
             services.AddSingleton<IGameFlowService, GameFlowService>();
             services.AddSingleton<IGameScoreService, GameScoreService>();
             services.AddSingleton<IGameHubService, GameHubService>();
+
             services.AddSingleton<IGameUpdatedService, GameUpdatedService>();
+            services.AddSingleton<IScenarioUpdateService, ScenarioUpdateService>();
 
             var corsConfig = Configuration.GetSection("Cors").Get<CorsConfig>();
             services.Configure<DatabaseConnections>(Configuration.GetSection("ConnectionStrings"));

@@ -1,6 +1,6 @@
 <p>Select/create scenario</p>
 <button mat-button (click)="createScenario()">New scenario</button>
-<button mat-button (click)="save()">Save scenario</button>
+<button mat-button (click)="save()" [disabled]="scenarioFormGroup.invalid">Save scenario</button>
 
 <ng-container *ngIf="scenario != null && !saving">
     <div class="form" [formGroup]="scenarioFormGroup">
@@ -9,7 +9,7 @@
         </mat-form-field>
 
         <mat-form-field class="form-input">
-            <input type="number" matInput placeholder="Scenario duration" formControlName="duration">
+            <input type="number" matInput placeholder="Scenario duration (game years)" formControlName="duration">
         </mat-form-field>
 
         <mat-form-field class="form-input">

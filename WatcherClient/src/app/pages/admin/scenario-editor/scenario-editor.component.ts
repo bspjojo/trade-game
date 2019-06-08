@@ -55,13 +55,13 @@ export class ScenarioEditorComponent implements OnInit, OnDestroy {
     private setupScenarioFormGroup(): void {
         this.ngUnsubscribe.next();
 
-        let name = new FormControl(this.scenario.name, Validators.required);
+        let name = new FormControl(this.scenario.name, [Validators.required, Validators.maxLength(100)]);
         name.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(v => this.scenario.name = v);
 
-        let duration = new FormControl(this.scenario.duration, Validators.required);
+        let duration = new FormControl(this.scenario.duration, [Validators.required, Validators.min(0)]);
         duration.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(v => this.scenario.duration = v);
 
-        let author = new FormControl(this.scenario.author, Validators.required);
+        let author = new FormControl(this.scenario.author, [Validators.required, Validators.maxLength(200)]);
         author.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(v => this.scenario.author = v);
 
         this.scenarioFormGroup = new FormGroup({

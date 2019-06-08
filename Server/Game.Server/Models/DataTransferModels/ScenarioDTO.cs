@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Game.Server.Models.DataTransferModels
 {
     public class ScenarioDTO
@@ -5,7 +7,7 @@ namespace Game.Server.Models.DataTransferModels
         public string Id { get; set; }
         public string Name { get; set; }
         public int Duration { get; set; }
-        public ScenarioCountry[] Countries { get; set; }
+        public IEnumerable<ScenarioCountry> Countries { get; set; }
     }
 
     public class ScenarioCountry

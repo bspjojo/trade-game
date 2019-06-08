@@ -14,27 +14,16 @@ DECLARE @ScenarioId UNIQUEIDENTIFIER = (SELECT TOP 1
 from dbo.Scenarios)
 
 INSERT INTO dbo.Scenario_Countries
-    (ScenarioID, Name, TargetScore)
+    (ScenarioID, Name, TargetScore, Produce_Grain, Produce_Meat, Produce_Oil, Produce_Cocoa, Produce_Cotton, Target_Grain, Target_Meat, Target_Energy, Target_Chocolate, Target_Textiles)
 values
-    (@ScenarioId, 'SeedCountry1', 40)
+    (@ScenarioId, 'SeedCountry1', 40, 3, 4, 5, 6, 7, 3, 4, 5, 6, 7)
 
--- select *
--- from dbo.Scenario_Countries
+select *
+from dbo.Scenario_Countries
+
 DECLARE @ScenarioCountryId UNIQUEIDENTIFIER = (SELECT TOP 1
     ID
 from dbo.Scenario_Countries)
-
-INSERT INTO dbo.BaseLine_Scenario_Country_Targets
-    (ScenarioCountryID, Grain, Meat, Energy, Chocolate, Textiles)
-values(@ScenarioCountryId, 3, 4, 5, 6, 7)
-
--- select *
--- from dbo.BaseLine_Scenario_Country_Targets
-
-INSERT INTO dbo.BaseLine_Scenario_Country_Produce
-    (ScenarioCountryID, Grain, Meat, Oil, Cocoa, Cotton)
-values(@ScenarioCountryId, 3, 4, 5, 6, 7)
-
 -- select *
 -- from dbo.BaseLine_Scenario_Country_Produce
 
