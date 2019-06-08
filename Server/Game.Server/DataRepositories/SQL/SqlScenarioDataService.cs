@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Game.Server.Models;
@@ -14,6 +15,7 @@ namespace Game.Server.DataRepositories.SQL
     public interface IScenarioDataService
     {
         Task<ScenarioDTO> CreateScenario(ScenarioDTO scenarioIn);
+        Task<IEnumerable<ScenarioSummaryDTO>> List();
     }
 
     public class SqlScenarioDataService : IScenarioDataService
@@ -94,6 +96,32 @@ namespace Game.Server.DataRepositories.SQL
             }
 
             return scenarioOut;
+        }
+
+        public async Task<IEnumerable<ScenarioSummaryDTO>> List()
+        {
+            _logger.LogInformation("Listing scenarios");
+
+            var getScenariosSql = @"SELECT ID
+                                        , [Name]
+                                        , DateCreated
+                                        , Duration
+                                    FROM dbo.Scenarios";
+
+            IEnumerable<ScenarioSummaryDTO> scenarioSummaries = new List<ScenarioSummaryDTO>();
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                scenarioSummaries = await connection.QueryAsync<ScenarioSummaryDTO>(getScenariosSql);
+
+                connection.Close();
+            }
+
+            _logger.LogInformation($"Found {scenarioSummaries.Count()} scenarios");
+
+            return scenarioSummaries;
         }
 
         public async Task<ScenarioDTO> UpdateScenario(ScenarioDTO scenarioIn)

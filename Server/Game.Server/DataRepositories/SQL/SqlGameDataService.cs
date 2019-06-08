@@ -25,7 +25,7 @@ namespace Game.Server.DataRepositories.SQL
 
         public async Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId)
         {
-            _logger.LogInformation("Getting active games.");
+            _logger.LogInformation("Getting countries in game.");
 
             var selectCountriesInGame = @"SELECT GameCountries.ID
                                         , ScenarioCountries.Name

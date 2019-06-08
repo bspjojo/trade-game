@@ -39,7 +39,7 @@ namespace Game.Server
             services.AddSingleton<IGameHubService, GameHubService>();
 
             services.AddSingleton<IGameUpdatedService, GameUpdatedService>();
-            services.AddSingleton<IScenarioUpdateService, ScenarioUpdateService>();
+            services.AddSingleton<IScenarioService, ScenarioService>();
 
             var corsConfig = Configuration.GetSection("Cors").Get<CorsConfig>();
             services.Configure<DatabaseConnections>(Configuration.GetSection("ConnectionStrings"));

@@ -9,19 +9,26 @@ namespace Game.Server.Controllers
     [ApiController]
     public class ScenarioController
     {
-        private readonly IScenarioUpdateService _scenarioUpdateService;
+        private readonly IScenarioService _scenarioService;
 
-        public ScenarioController(IScenarioUpdateService scenarioUpdateService)
+        public ScenarioController(IScenarioService scenarioService)
         {
-            _scenarioUpdateService = scenarioUpdateService;
+            _scenarioService = scenarioService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] ScenarioDTO scenario)
         {
-            var updatedScenario = await _scenarioUpdateService.Update(scenario);
+            var updatedScenario = await _scenarioService.Update(scenario);
 
             return new OkObjectResult(updatedScenario);
+        }
+
+        public async Task<IActionResult> List()
+        {
+            var scenarioSummaries = await _scenarioService.List();
+
+            return new OkObjectResult(scenarioSummaries);
         }
     }
 }
