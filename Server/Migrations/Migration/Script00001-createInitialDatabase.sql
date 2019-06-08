@@ -6,6 +6,7 @@ CREATE TABLE dbo.Scenarios
 (
     ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
     [Name] VARCHAR(100),
+    [Author] VARCHAR(200),
     [DateCreated] DATE,
     Duration int
 )
