@@ -1,9 +1,9 @@
 -- SEED
 
 insert INTO dbo.Scenarios
-    (Name,DateCreated,Duration)
+    (Name, DateCreated, Duration, Author)
 values
-    ('SeedScenario1', '2008-11-11', 5)
+    ('SeedScenario1', '2008-11-11', 5, 'Seeded')
 
 -- select *
 -- from dbo.Scenarios

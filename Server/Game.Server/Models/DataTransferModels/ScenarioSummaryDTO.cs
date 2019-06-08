@@ -6,6 +6,7 @@ namespace Game.Server.Models.DataTransferModels
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Author { get; set; }
         public int Duration { get; set; }
     }
 }

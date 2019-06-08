@@ -20,4 +20,8 @@ export class GameManagementComponent implements OnInit {
     public async reloadScenarios(): Promise<void> {
         this.scenarios = await this.listScenarioService.getScenarios();
     }
+
+    public createGame(scenario: ScenarioSummary): void {
+        console.log(scenario);
+    }
 }

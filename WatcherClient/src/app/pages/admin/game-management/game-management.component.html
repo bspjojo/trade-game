@@ -1,4 +1,27 @@
-<p>
-    game-management works!
-</p>
-<pre>{{scenarios|json}}</pre>
+<table class="scenario-table">
+    <caption class="table-caption">
+        <h4>Scenarios</h4>
+    </caption>
+    <thead class="table-head">
+        <tr>
+            <th></th>
+            <th class="name-col">Name</th>
+            <th class="duration-col">Duration</th>
+            <th class="author-col">Author</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="table-body">
+        <ng-container *ngIf="scenarios != null">
+            <tr *ngFor="let scenario of scenarios;  let i = index">
+                <td>{{i + 1}}</td>
+                <td class="name-col">{{scenario.name}}</td>
+                <td class="duration-col">{{scenario.duration}}</td>
+                <td class="author-col">{{scenario.author}}</td>
+                <td>
+                    <button mat-button (click)="createGame(scenario)">Create game</button>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>

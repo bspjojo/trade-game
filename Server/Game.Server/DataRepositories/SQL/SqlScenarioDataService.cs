@@ -106,6 +106,7 @@ namespace Game.Server.DataRepositories.SQL
                                         , [Name]
                                         , DateCreated
                                         , Duration
+                                        , Author
                                     FROM dbo.Scenarios";
 
             IEnumerable<ScenarioSummaryDTO> scenarioSummaries = new List<ScenarioSummaryDTO>();
