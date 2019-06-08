@@ -1,6 +1,6 @@
 <p>Select/create scenario</p>
 <button mat-button (click)="createScenario()">New scenario</button>
-<button mat-button (click)="save()" [disabled]="scenarioFormGroup.invalid">Save scenario</button>
+<button mat-button (click)="save()">Save scenario</button>
 
 <ng-container *ngIf="scenario != null && !saving">
     <div class="form" [formGroup]="scenarioFormGroup">
