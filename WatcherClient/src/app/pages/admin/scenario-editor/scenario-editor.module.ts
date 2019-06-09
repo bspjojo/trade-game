@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatExpansionModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatExpansionModule, MatInputModule } from '@angular/material';
 
 import { CountryEditorComponent } from './country-editor/country-editor.component';
 import { ScenarioEditorComponent } from './scenario-editor.component';
@@ -19,7 +19,8 @@ import { ScenarioEditorService } from './scenario-editor.service';
         CommonModule,
         MatInputModule,
         MatExpansionModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatButtonModule
     ],
     providers: [
         ScenarioEditorService

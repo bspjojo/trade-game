@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatButtonModule, MatTableModule } from '@angular/material';
 
 import { GameManagementComponent } from './game-management.component';
 import { ScenarioService } from './scenario.service';
@@ -9,7 +10,9 @@ import { ScenarioService } from './scenario.service';
     exports: [GameManagementComponent],
     providers: [ScenarioService],
     imports: [
-        CommonModule
+        CommonModule,
+        MatButtonModule,
+        MatTableModule
     ]
 })
 export class GameManagementModule { }

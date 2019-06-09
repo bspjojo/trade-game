@@ -10,10 +10,13 @@ import { ScenarioService } from './scenario.service';
 })
 export class GameManagementComponent implements OnInit {
     public scenarios: ScenarioSummary[];
+    public displayedColumns: string[];
 
     constructor(private scenarioService: ScenarioService) { }
 
     public ngOnInit(): void {
+        this.displayedColumns = ['name', 'duration', 'weight', 'create'];
+
         this.reloadScenarios();
     }
 
