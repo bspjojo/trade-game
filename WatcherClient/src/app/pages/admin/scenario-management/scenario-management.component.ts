@@ -4,11 +4,11 @@ import { ScenarioSummary } from './scenario-summary';
 import { ScenarioService } from './scenario.service';
 
 @Component({
-    selector: 'watcher-game-management',
-    templateUrl: './game-management.component.html',
-    styleUrls: ['./game-management.component.less']
+    selector: 'watcher-scenario-management',
+    templateUrl: './scenario-management.component.html',
+    styleUrls: ['./scenario-management.component.less']
 })
-export class GameManagementComponent implements OnInit {
+export class ScenarioManagementComponent implements OnInit {
     public scenarios: ScenarioSummary[];
     public displayedColumns: string[];
 

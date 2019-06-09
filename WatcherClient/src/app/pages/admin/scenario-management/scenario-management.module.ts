@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule, MatTableModule } from '@angular/material';
 
-import { GameManagementComponent } from './game-management.component';
+import { ScenarioManagementComponent } from './scenario-management.component';
 import { ScenarioService } from './scenario.service';
 
 @NgModule({
-    declarations: [GameManagementComponent],
-    exports: [GameManagementComponent],
+    declarations: [ScenarioManagementComponent],
+    exports: [ScenarioManagementComponent],
     providers: [ScenarioService],
     imports: [
         CommonModule,
@@ -15,4 +15,4 @@ import { ScenarioService } from './scenario.service';
         MatTableModule
     ]
 })
-export class GameManagementModule { }
+export class ScenarioManagementModule { }
