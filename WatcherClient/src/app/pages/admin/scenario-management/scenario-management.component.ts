@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 
+import { GameCreationDialogComponent } from './game-creation-dialog/game-creation-dialog.component';
 import { ScenarioSummary } from './scenario-summary';
 import { ScenarioService } from './scenario.service';
 
@@ -12,7 +14,7 @@ export class ScenarioManagementComponent implements OnInit {
     public scenarios: ScenarioSummary[];
     public displayedColumns: string[];
 
-    constructor(private scenarioService: ScenarioService) { }
+    constructor(private scenarioService: ScenarioService, private dialog: MatDialog) { }
 
     public ngOnInit(): void {
         this.displayedColumns = ['name', 'duration', 'weight', 'create'];
@@ -26,5 +28,14 @@ export class ScenarioManagementComponent implements OnInit {
 
     public createGame(scenario: ScenarioSummary): void {
         console.log(scenario);
+
+        const dialogRef = this.dialog.open(GameCreationDialogComponent, {
+            width: '250px',
+            data: scenario
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 }
