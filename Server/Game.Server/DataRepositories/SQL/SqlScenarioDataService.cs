@@ -12,12 +12,6 @@ using Microsoft.Extensions.Options;
 
 namespace Game.Server.DataRepositories.SQL
 {
-    public interface IScenarioDataService
-    {
-        Task<ScenarioDTO> CreateScenario(ScenarioDTO scenarioIn);
-        Task<IEnumerable<ScenarioSummaryDTO>> List();
-    }
-
     public class SqlScenarioDataService : IScenarioDataService
     {
         private readonly string _connectionString;
