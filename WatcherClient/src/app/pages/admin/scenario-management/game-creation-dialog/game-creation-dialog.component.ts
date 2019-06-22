@@ -13,6 +13,6 @@ export class GameCreationDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: ScenarioSummary) { }
 
     public ngOnInit(): void {
+        // todo get scenario data.
     }
-
 }
