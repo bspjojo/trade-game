@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Game.Server.DataRepositories.SQL;
+using Game.Server.DataRepositories;
 using Game.Server.Models.DataTransferModels;
 
 namespace Game.Server.Services
