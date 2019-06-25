@@ -24,7 +24,7 @@ namespace Game.Server.DataRepositories.SQL
             _connectionString = dataConnections.Value.TradeGame;
         }
 
-        public async Task<string> CreateGameFromScenarioId(Guid scenarioId, string gameName)
+        public async Task<Guid> CreateGameFromScenarioId(Guid scenarioId, string gameName)
         {
             _logger.LogInformation($"Creating game from scenario: {scenarioId}, name: {gameName}");
 
@@ -112,7 +112,7 @@ namespace Game.Server.DataRepositories.SQL
                 connection.Close();
             }
 
-            return gameId.ToString();
+            return gameId;
         }
 
         public async Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId)

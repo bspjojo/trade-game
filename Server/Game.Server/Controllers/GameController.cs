@@ -39,9 +39,14 @@ namespace Game.Server.Controllers
         }
 
         [HttpPost]
-        public Task<string> CreateFromScenario(CreateGameFromScenarioDTO createGameInformation)
+        public async Task<GameCreatedModel> CreateFromScenario(CreateGameFromScenarioDTO createGameInformation)
         {
-            return _gameDataService.CreateGameFromScenarioId(createGameInformation.ScenarioId, createGameInformation.Name);
+            var gameId = await _gameDataService.CreateGameFromScenarioId(createGameInformation.ScenarioId, createGameInformation.Name);
+
+            return new GameCreatedModel
+            {
+                GameId = gameId
+            };
         }
 
         [HttpGet]
