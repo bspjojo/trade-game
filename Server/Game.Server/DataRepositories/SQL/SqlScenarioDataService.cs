@@ -42,10 +42,10 @@ namespace Game.Server.DataRepositories.SQL
             var insertCountrySql = @"DECLARE @NewCountryVar table(ID UNIQUEIDENTIFIER);
 
                                     INSERT INTO dbo.Scenario_Countries
-                                        (ScenarioID, Name, TargetScore)
+                                        (ScenarioID, Name, TargetScore, Produce_Grain, Produce_Meat, Produce_Oil, Produce_Cocoa, Produce_Cotton, Target_Grain, Target_Meat, Target_Energy, Target_Chocolate, Target_Textiles)
                                         OUTPUT inserted.ID INTO @NewCountryVar
                                     VALUES
-                                        (@ScenarioId, @CountryName, @TargetScore)
+                                        (@ScenarioId, @CountryName, @TargetScore, @Produce_Grain, @Produce_Meat, @Produce_Oil, @Produce_Cocoa, @Produce_Cotton, @Target_Grain, @Target_Meat, @Target_Energy, @Target_Chocolate, @Target_Textiles)
                                     
                                     SELECT TOP 1
                                         ID
@@ -79,7 +79,17 @@ namespace Game.Server.DataRepositories.SQL
                     {
                         ScenarioId = scenarioId.ID,
                         CountryName = country.Name,
-                        TargetScore = country.TargetScore
+                        TargetScore = country.TargetScore,
+                        Produce_Grain = country.Produce.Grain,
+                        Produce_Meat = country.Produce.Meat,
+                        Produce_Oil = country.Produce.Oil,
+                        Produce_Cocoa = country.Produce.Cocoa,
+                        Produce_Cotton = country.Produce.Cotton,
+                        Target_Grain = country.Targets.Grain,
+                        Target_Meat = country.Targets.Meat,
+                        Target_Energy = country.Targets.Energy,
+                        Target_Chocolate = country.Targets.Chocolate,
+                        Target_Textiles = country.Targets.Textiles
                     });
 
                     country.Id = countryId.ID.ToString();
