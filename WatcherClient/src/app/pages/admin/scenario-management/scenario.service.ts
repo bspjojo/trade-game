@@ -11,6 +11,7 @@ export class ScenarioService {
     public getScenarios(): Promise<ScenarioSummary[]> {
         return this.httpClient.get<ScenarioSummary[]>(this.configService.config.apiUrl + 'api/scenario/list').toPromise();
     }
+
     public createGameFromScenario(scenarioId: string, gameName: string): Promise<string> {
         console.log(scenarioId);
         return this.httpClient.post<string>(this.configService.config.apiUrl + 'api/game/createFromScenario',

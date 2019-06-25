@@ -179,14 +179,12 @@ namespace Game.Server.DataRepositories.SQL
         {
             _logger.LogInformation("Getting break even for country with id games.");
 
-            var selectBreakEvenForACountryQuery = @"SELECT BreakEven.Chocolate
-                                            , BreakEven.Energy
-                                            , BreakEven.Grain
-                                            , BreakEven.Meat
-                                            , BreakEven.Textiles
-                                        FROM dbo.BaseLine_Scenario_Country_Targets as BreakEven
-                                            JOIN dbo.Scenario_Countries AS ScenarioCountries
-                                            ON ScenarioCountries.ID = BreakEven.ScenarioCountryID
+            var selectBreakEvenForACountryQuery = @"SELECT ScenarioCountries.Target_Chocolate
+                                            , ScenarioCountries.Target_Energy
+                                            , ScenarioCountries.Target_Grain
+                                            , ScenarioCountries.Target_Meat
+                                            , ScenarioCountries.Target_Textiles
+                                        FROM dbo.Scenario_Countries AS ScenarioCountries
                                             JOIN dbo.Game_Countries AS GameCountries
                                             ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
                                         WHERE GameCountries.ID = @CountryId";
