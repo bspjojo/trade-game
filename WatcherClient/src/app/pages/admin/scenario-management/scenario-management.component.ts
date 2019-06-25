@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { GameCreationDialogComponent } from './game-creation-dialog/game-creation-dialog.component';
-import { ScenarioSummary } from './scenario-summary';
+import { GameCreationData, ScenarioSummary } from './scenario-summary';
 import { ScenarioService } from './scenario.service';
 
 @Component({
@@ -27,14 +27,16 @@ export class ScenarioManagementComponent implements OnInit {
     }
 
     public createGame(scenario: ScenarioSummary): void {
-        console.log(scenario);
-
         const dialogRef = this.dialog.open(GameCreationDialogComponent, {
-            width: '250px',
+            width: '400px',
             data: scenario
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe((result: GameCreationData) => {
+            if (result != null) {
+                this.scenarioService.createGameFromScenario(result.scenarioId, result.name);
+            }
+
             console.log('The dialog was closed');
         });
     }

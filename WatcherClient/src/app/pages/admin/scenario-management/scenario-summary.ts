@@ -4,3 +4,8 @@ export interface ScenarioSummary {
     author: string;
     duration: number;
 }
+
+export interface GameCreationData {
+    scenarioId: string;
+    name: string;
+}
