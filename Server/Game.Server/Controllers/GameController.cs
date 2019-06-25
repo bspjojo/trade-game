@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Game.Server.DataRepositories;
 using Game.Server.Models;
+using Game.Server.Models.DataTransferModels;
 using Game.Server.Services;
 using Game.Server.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,12 @@ namespace Game.Server.Controllers
             };
 
             return response;
+        }
+
+        [HttpPost]
+        public Task<string> CreateFromScenario(CreateGameFromScenarioDTO createGameInformation)
+        {
+            return _gameDataService.CreateGameFromScenarioId(createGameInformation.ScenarioId, createGameInformation.Name);
         }
 
         [HttpGet]
