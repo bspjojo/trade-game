@@ -84,6 +84,8 @@ namespace Game.Server.DataRepositories.SQL
                                     DECLARE @NewGameCountryId UNIQUEIDENTIFIER = (SELECT TOP 1
                                         ID
                                     FROM @CreatedGameCountries)
+                                    
+                                    DELETE FROM @CreatedGameCountries
 
                                     -- add the targets for year 1
 
