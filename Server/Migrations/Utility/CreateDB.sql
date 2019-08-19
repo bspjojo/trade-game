@@ -1,1 +1,1 @@
-CREATE database ScoutTradeGame
+CREATE database TradeGame

@@ -1,0 +1,16 @@
+{
+    "folders": [
+        {
+            "name": "Watcher",
+            "path": "./WatcherClient"
+        },
+        {
+            "name": "Scoring",
+            "path": "./ScoringClient"
+        },
+        {
+            "name": "Game server",
+            "path": "./Server"
+        }
+    ]
+}

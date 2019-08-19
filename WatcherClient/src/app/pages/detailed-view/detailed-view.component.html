@@ -35,7 +35,7 @@
             </ng-container>
             <td class="target-score-col">{{country.targetScore}}</td>
             <td class="current-score-col opacity"
-                [ngClass]="country.currentScore > country.targetScore ? 'above-score' : 'below-score'">
+                [ngClass]="country.currentScore >= country.targetScore ? 'above-score' : 'below-score'">
                 {{country.currentScore}}</td>
         </tr>
     </tbody>

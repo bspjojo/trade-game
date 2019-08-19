@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-
 import * as signalR from '@aspnet/signalr';
+
 import { ConfigService } from '../app-config/config.service';
-import { Game } from './game.model';
 import { GameDataService } from './game-data.service';
+import { Game } from './game.model';
 
 @Injectable()
 export class GameHubService {

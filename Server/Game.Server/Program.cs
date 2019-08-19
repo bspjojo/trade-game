@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Game.Server
 {
@@ -18,6 +19,12 @@ namespace Game.Server
                     config.AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     config.AddJsonFile($"appsettings.json", optional: true, reloadOnChange: true);
                     config.AddEnvironmentVariables();
+                }).ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddEventSourceLogger();
                 })
                 .UseStartup<Startup>()
                 .UseUrls("http://localhost:4300/", "http://*:4300/");

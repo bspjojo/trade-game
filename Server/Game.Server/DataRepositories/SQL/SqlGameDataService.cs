@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -10,22 +11,115 @@ using Game.Server.Services.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Game.Server.DataRepositories
+namespace Game.Server.DataRepositories.SQL
 {
     public class SqlGameDataService : IGameDataService
     {
         private readonly string _connectionString;
         public ILogger<SqlGameDataService> _logger { get; }
 
-        public SqlGameDataService(ILogger<SqlGameDataService> logger, IOptions<GameConnection> gameConnectionInformation)
+        public SqlGameDataService(ILogger<SqlGameDataService> logger, IOptions<DatabaseConnections> dataConnections)
         {
             _logger = logger;
-            _connectionString = gameConnectionInformation.Value.GameDb;
+            _connectionString = dataConnections.Value.TradeGame;
+        }
+
+        public async Task<Guid> CreateGameFromScenarioId(Guid scenarioId, string gameName)
+        {
+            _logger.LogInformation($"Creating game from scenario: {scenarioId}, name: {gameName}");
+
+            var createGameSql = @"DECLARE @CreatedGames TABLE(ID UNIQUEIDENTIFIER)
+
+                                INSERT INTO dbo.Games
+                                    (ScenarioID, Name, DateStarted, Active, CurrentYear)
+                                OUTPUT inserted.ID INTO @CreatedGames
+                                VALUES
+                                    (@ScenarioId, @GameName, @GameStartDate, 1, 1)
+
+                                DECLARE @NewGameId UNIQUEIDENTIFIER = (SELECT TOP 1
+                                    ID
+                                FROM @CreatedGames)
+
+                                -- insert 
+                                DECLARE @TempScenarioCountries TABLE(
+                                    [ID] [uniqueidentifier] NOT NULL,
+                                    [ScenarioID] [uniqueidentifier] NULL,
+                                    [Name] [varchar](100) NULL,
+                                    [TargetScore] [int] NULL,
+                                    [Produce_Grain] [int] NULL,
+                                    [Produce_Meat] [int] NULL,
+                                    [Produce_Oil] [int] NULL,
+                                    [Produce_Cocoa] [int] NULL,
+                                    [Produce_Cotton] [int] NULL,
+                                    [Target_Grain] [int] NULL,
+                                    [Target_Meat] [int] NULL,
+                                    [Target_Energy] [int] NULL,
+                                    [Target_Chocolate] [int] NULL,
+                                    [Target_Textiles] [int] NULL);
+
+                                INSERT INTO @TempScenarioCountries
+                                SELECT *
+                                FROM Scenario_Countries
+                                WHERE Scenario_Countries.ScenarioID = @ScenarioId
+
+                                WHILE EXISTS (SELECT 1
+                                FROM @TempScenarioCountries)
+                                BEGIN
+                                    DECLARE @ScenarioCountryId UNIQUEIDENTIFIER
+
+                                    SELECT TOP 1
+                                        @ScenarioCountryId = ID
+                                    FROM @TempScenarioCountries
+
+                                    -- create a new game country
+                                    DECLARE @CreatedGameCountries TABLE(ID UNIQUEIDENTIFIER)
+
+                                    INSERT INTO dbo.Game_Countries
+                                        (GameID, ScenarioCountryID)
+                                    OUTPUT inserted.ID INTO @CreatedGameCountries
+                                    VALUES
+                                        (@NewGameId, @ScenarioCountryId)
+
+
+                                    DECLARE @NewGameCountryId UNIQUEIDENTIFIER = (SELECT TOP 1
+                                        ID
+                                    FROM @CreatedGameCountries)
+                                    
+                                    DELETE FROM @CreatedGameCountries
+
+                                    -- add the targets for year 1
+
+                                    INSERT INTO dbo.Game_Country_Year_Targets
+                                        (GameCountryID, Year, Grain, Meat, Energy, Chocolate, Textiles)
+                                    SELECT @NewGameCountryId, 1, SC.Target_Grain, SC.Target_Meat, SC.Target_Energy, SC.Target_Chocolate, SC.Target_Textiles
+                                    FROM dbo.Scenario_Countries AS SC
+                                    WHERE SC.ID = @ScenarioCountryId
+
+                                    -- let the loop move to the next item
+                                    DELETE FROM @TempScenarioCountries WHERE ID = @ScenarioCountryId
+                                END
+
+                                SELECT @NewGameId";
+            Guid gameId;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                gameId = await connection.QueryFirstAsync<Guid>(createGameSql, new
+                {
+                    ScenarioId = scenarioId,
+                    GameName = gameName,
+                    GameStartDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
+                });
+                connection.Close();
+            }
+
+            return gameId;
         }
 
         public async Task<IEnumerable<CountrySearchResult>> GetListOfCountriesInGame(Guid gameId)
         {
-            _logger.LogInformation("Getting active games.");
+            _logger.LogInformation("Getting countries in game.");
 
             var selectCountriesInGame = @"SELECT GameCountries.ID
                                         , ScenarioCountries.Name
@@ -87,14 +181,12 @@ namespace Game.Server.DataRepositories
         {
             _logger.LogInformation("Getting break even for country with id games.");
 
-            var selectBreakEvenForACountryQuery = @"SELECT BreakEven.Chocolate
-                                            , BreakEven.Energy
-                                            , BreakEven.Grain
-                                            , BreakEven.Meat
-                                            , BreakEven.Textiles
-                                        FROM dbo.BaseLine_Scenario_Country_Targets as BreakEven
-                                            JOIN dbo.Scenario_Countries AS ScenarioCountries
-                                            ON ScenarioCountries.ID = BreakEven.ScenarioCountryID
+            var selectBreakEvenForACountryQuery = @"SELECT ScenarioCountries.Target_Chocolate
+                                            , ScenarioCountries.Target_Energy
+                                            , ScenarioCountries.Target_Grain
+                                            , ScenarioCountries.Target_Meat
+                                            , ScenarioCountries.Target_Textiles
+                                        FROM dbo.Scenario_Countries AS ScenarioCountries
                                             JOIN dbo.Game_Countries AS GameCountries
                                             ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
                                         WHERE GameCountries.ID = @CountryId";
@@ -366,7 +458,7 @@ namespace Game.Server.DataRepositories
                 Duration = gameResult.Duration,
                 Name = gameResult.Name,
                 CurrentYear = gameResult.CurrentYear,
-                Countries = countryDictionary.Values.ToList()
+                Countries = countryDictionary.Values.OrderBy(v => v.Name).ToList()
             };
 
             return bm;

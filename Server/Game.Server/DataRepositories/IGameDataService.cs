@@ -8,6 +8,7 @@ namespace Game.Server.DataRepositories
 {
     public interface IGameDataService
     {
+        Task<Guid> CreateGameFromScenarioId(Guid scenarioId, string gameName);
         Task<ConsumptionResources> GetBreakEvenForACountry(string countryId);
         Task<GameInformationResult> GetGameInformationForACountry(string countryId);
         Task<ConsumptionResources> GetTargetsForACountryForAYear(string countryId, int year);

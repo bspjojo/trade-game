@@ -1,0 +1,46 @@
+<ng-container [formGroup]="countryFormGroup">
+    <mat-form-field class="form-input">
+        <input matInput type="text" placeholder="Country name" formControlName="nameControl">
+    </mat-form-field>
+    <mat-form-field class="form-input">
+        <input matInput type="number" placeholder="Target score" formControlName="targetScoreControl">
+    </mat-form-field>
+
+    <h4>Break even</h4>
+    <div formGroupName="baselineTargets">
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Chocolate" formControlName="chocolateControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Energy" formControlName="energyControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Grain" formControlName="grainControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Meat" formControlName="meatControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Textiles" formControlName="textilesControl">
+        </mat-form-field>
+    </div>
+
+    <h4>Produce</h4>
+    <div formGroupName="baselineProduce">
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Cocoa" formControlName="cocoaControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Cotton" formControlName="cottonControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Grain" formControlName="grainControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Meat" formControlName="meatControl">
+        </mat-form-field>
+        <mat-form-field class="form-input">
+            <input matInput type="number" placeholder="Oil" formControlName="oilControl">
+        </mat-form-field>
+    </div>
+</ng-container>

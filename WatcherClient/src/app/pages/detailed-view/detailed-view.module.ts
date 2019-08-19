@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DetailedViewComponent } from './detailed-view.component';
+import { NgModule } from '@angular/core';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+
+import { DetailedViewComponent } from './detailed-view.component';
 
 @NgModule({
     declarations: [

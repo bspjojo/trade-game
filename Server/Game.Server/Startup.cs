@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Game.Server.Models;
+using Game.Server.DataRepositories.SQL;
 
 namespace Game.Server
 {
@@ -31,13 +32,17 @@ namespace Game.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IGameDataService, SqlGameDataService>();
+            services.AddSingleton<IScenarioDataService, SqlScenarioDataService>();
+
             services.AddSingleton<IGameFlowService, GameFlowService>();
             services.AddSingleton<IGameScoreService, GameScoreService>();
             services.AddSingleton<IGameHubService, GameHubService>();
+
             services.AddSingleton<IGameUpdatedService, GameUpdatedService>();
+            services.AddSingleton<IScenarioService, ScenarioService>();
 
             var corsConfig = Configuration.GetSection("Cors").Get<CorsConfig>();
-            services.Configure<GameConnection>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<DatabaseConnections>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddCors(o =>
                 o.AddPolicy("All",

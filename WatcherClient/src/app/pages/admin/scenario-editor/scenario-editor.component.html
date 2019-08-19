@@ -1,0 +1,36 @@
+<p>Select/create scenario</p>
+<div>
+    <button mat-stroked-button (click)="createScenario()">New scenario</button>
+    <button mat-stroked-button (click)="save()">Save scenario</button>
+</div>
+
+<ng-container *ngIf="scenario != null && !saving">
+    <div class="form" [formGroup]="scenarioFormGroup">
+        <mat-form-field class="form-input">
+            <input type="text" matInput placeholder="Scenario name" formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field class="form-input">
+            <input type="number" matInput placeholder="Scenario duration (game years)" formControlName="duration">
+        </mat-form-field>
+
+        <mat-form-field class="form-input">
+            <input type="text" matInput placeholder="Scenario author" formControlName="author">
+        </mat-form-field>
+
+        <button mat-button (click)="addCountry()">Add country</button>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let country of scenario.countries">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{country.name}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <watcher-country-editor [country]="country"></watcher-country-editor>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</ng-container>
+<ng-container *ngIf="saving">
+    Saving
+</ng-container>

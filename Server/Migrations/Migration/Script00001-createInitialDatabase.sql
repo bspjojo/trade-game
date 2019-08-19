@@ -6,6 +6,7 @@ CREATE TABLE dbo.Scenarios
 (
     ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
     [Name] VARCHAR(100),
+    [Author] VARCHAR(200),
     [DateCreated] DATE,
     Duration int
 )
@@ -15,29 +16,19 @@ CREATE TABLE dbo.Scenario_Countries
     ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
     ScenarioID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES dbo.Scenarios(ID),
     [Name] VARCHAR(100),
-    TargetScore INT
-)
-
-CREATE TABLE dbo.BaseLine_Scenario_Country_Produce
-(
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
-    ScenarioCountryID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES dbo.Scenario_Countries(ID),
-    Grain INT,
-    Meat INT,
-    Oil INT,
-    Cocoa INT,
-    Cotton INT
-)
-
-CREATE TABLE dbo.BaseLine_Scenario_Country_Targets
-(
-    ID UNIQUEIDENTIFIER PRIMARY KEY DEFAULT (NEWID()),
-    ScenarioCountryID UNIQUEIDENTIFIER FOREIGN KEY REFERENCES dbo.Scenario_Countries(ID),
-    Grain INT,
-    Meat INT,
-    Energy INT,
-    Chocolate INT,
-    Textiles INT
+    TargetScore INT,
+    -- produce
+    Produce_Grain INT,
+    Produce_Meat INT,
+    Produce_Oil INT,
+    Produce_Cocoa INT,
+    Produce_Cotton INT,
+    -- targets
+    Target_Grain INT,
+    Target_Meat INT,
+    Target_Energy INT,
+    Target_Chocolate INT,
+    Target_Textiles INT
 )
 
 -- Game
@@ -119,4 +110,4 @@ CREATE TABLE dbo.Game_Country_Year_Growth_Certificates_Purchased
     Cotton INT
 )
 
-COMMIT TRAN
+ROLLBACk TRAN

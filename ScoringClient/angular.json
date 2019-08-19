@@ -49,7 +49,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "scoring-client:build",
-            "port": 4301
+            "port": 4301,
+            "host": "0.0.0.0"
           },
           "configurations": {
             "production": {

@@ -1,0 +1,34 @@
+<ng-container *ngIf="scenarios != null">
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="scenarios">
+            <!-- Position Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let scenario"> {{scenario.name}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="duration">
+                <th mat-header-cell *matHeaderCellDef> Duration </th>
+                <td mat-cell *matCellDef="let scenario">{{scenario.duration}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Author </th>
+                <td mat-cell *matCellDef="let scenario"> {{scenario.author}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="create">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let scenario">
+                    <button mat-stroked-button (click)="createGame(scenario)">Create game</button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</ng-container>

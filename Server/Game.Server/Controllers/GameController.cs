@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Game.Server.Models;
-using Game.Server.Services;
 using Game.Server.DataRepositories;
+using Game.Server.Models;
+using Game.Server.Models.DataTransferModels;
+using Game.Server.Services;
 using Game.Server.Services.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Game.Server.Controllers
 {
@@ -36,6 +36,17 @@ namespace Game.Server.Controllers
             };
 
             return response;
+        }
+
+        [HttpPost]
+        public async Task<GameCreatedModel> CreateFromScenario(CreateGameFromScenarioDTO createGameInformation)
+        {
+            var gameId = await _gameDataService.CreateGameFromScenarioId(createGameInformation.ScenarioId, createGameInformation.Name);
+
+            return new GameCreatedModel
+            {
+                GameId = gameId
+            };
         }
 
         [HttpGet]
