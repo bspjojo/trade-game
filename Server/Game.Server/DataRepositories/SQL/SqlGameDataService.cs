@@ -458,7 +458,7 @@ namespace Game.Server.DataRepositories.SQL
                 Duration = gameResult.Duration,
                 Name = gameResult.Name,
                 CurrentYear = gameResult.CurrentYear,
-                Countries = countryDictionary.Values.ToList()
+                Countries = countryDictionary.Values.OrderBy(v => v.Name).ToList()
             };
 
             return bm;
