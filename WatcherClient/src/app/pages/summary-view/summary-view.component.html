@@ -16,7 +16,7 @@
             <td *ngFor="let n of game.duration | timesRepeat" class="year-score">{{country.scores[n]?.score}}</td>
             <td class="target-score-col">{{country.targetScore}}</td>
             <td class="current-score-col opacity"
-                [ngClass]="country.currentScore > country.targetScore ? 'above-score' : 'below-score'">
+                [ngClass]="country.currentScore >= country.targetScore ? 'above-score' : 'below-score'">
                 {{country.currentScore}}</td>
         </tr>
     </tbody>
