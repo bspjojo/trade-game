@@ -1,5 +1,11 @@
 version: "3"
 services:
+    web:
+        image: "game.server:latest"
+        ports:
+            - "4300:4300"
+        depends_on:
+            - db
     db:
         image: "microsoft/mssql-server-linux"
         container_name: scout-trade-game-sql
