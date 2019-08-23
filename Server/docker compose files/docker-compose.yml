@@ -1,5 +1,12 @@
 version: "3"
 services:
+    watcher:
+        image: "watcherclient:latest"
+        ports:
+            - "4301:4301"
+        depends_on:
+            - api
+        #todo config - api address
     scoring:
         image: "scoringclient:latest"
         ports:
