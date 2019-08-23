@@ -16,7 +16,7 @@ namespace Game.Server.DataRepositories.SQL
     public class SqlGameDataService : IGameDataService
     {
         private readonly string _connectionString;
-        public ILogger<SqlGameDataService> _logger { get; }
+        private readonly ILogger<SqlGameDataService> _logger;
 
         public SqlGameDataService(ILogger<SqlGameDataService> logger, IOptions<DatabaseConnections> dataConnections)
         {

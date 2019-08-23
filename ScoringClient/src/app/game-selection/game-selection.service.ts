@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { Injectable } from '@angular/core';
 import { ConfigService } from '../app-config/config.service';
 import { GameSelection } from './game-selection.model';
 
@@ -10,8 +9,10 @@ export class GameSelectionService {
 
     constructor(private configService: ConfigService, private httpClient: HttpClient) { }
 
-    public getGames(): Promise<GameSelection[]> {
-        return this.httpClient.get<GameSelection[]>(this.configService.config.apiUrl + 'api/game/games').toPromise();
+    public async getGames(): Promise<GameSelection[]> {
+        let config = await this.configService.getConfig();
+
+        return this.httpClient.get<GameSelection[]>(config.apiUrl + 'api/game/games').toPromise();
     }
 
     public set game(selectedGame: GameSelection) {

@@ -7,5 +7,9 @@
         "**/.DS_Store": true
     },
     "editor.detectIndentation": false,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "typescript.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    }
 }

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { CountrySelection } from './country-selection/country-selection.model';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { ConfigService } from '../app-config/config.service';
 import { GameSelectionService } from '../game-selection/game-selection.service';
+import { CountrySelection } from './country-selection/country-selection.model';
 
 @Injectable()
 export class ScoringComponentService {
@@ -19,17 +19,21 @@ export class ScoringComponentService {
         return this.selectedCountry;
     }
 
-    public getCountries(gameId: string): Promise<CountrySelection[]> {
-        return this.httpClient.get<CountrySelection[]>(this.configService.config.apiUrl + 'api/game/countries/' + gameId).toPromise();
+    public async getCountries(gameId: string): Promise<CountrySelection[]> {
+        let config = await this.configService.getConfig();
+
+        return this.httpClient.get<CountrySelection[]>(config.apiUrl + 'api/game/countries/' + gameId).toPromise();
     }
 
-    public updateScore(yearResults): Promise<any> {
+    public async updateScore(yearResults): Promise<any> {
         let processedRequestObject = {
             gameId: this.gameSelectionService.game.id,
             countryId: this.selectedCountry.id,
             yearResults
         };
 
-        return this.httpClient.post<any>(this.configService.config.apiUrl + 'api/game/updateScores', processedRequestObject).toPromise();
+        let config = await this.configService.getConfig();
+
+        return this.httpClient.post<any>(config.apiUrl + 'api/game/updateScores', processedRequestObject).toPromise();
     }
 }
