@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { ConfigService } from '../app-config/config.service';
 import { GameDataService } from './game-data.service';
 import { Game } from './game.model';
@@ -13,13 +12,16 @@ export class GameApiService {
         this.gameDataService.setNewGameData(null);
 
         if (gameId != null) {
-            let game = await this.httpClient.get<Game>(`${this.configService.config.apiUrl}api/game/scores/${gameId}`).toPromise();
+            let config = await this.configService.getConfig();
+
+            let game = await this.httpClient.get<Game>(`${config.apiUrl}api/game/scores/${gameId}`).toPromise();
             this.gameDataService.setNewGameData(game);
         }
     }
     public async setGameYear(gameId: string, year: number): Promise<void> {
         if (gameId != null) {
-            await this.httpClient.post(`${this.configService.config.apiUrl}api/game/UpdateGameYear`, { gameId, year }).toPromise();
+            let config = await this.configService.getConfig();
+            await this.httpClient.post(`${config.apiUrl}api/game/UpdateGameYear`, { gameId, year }).toPromise();
         }
     }
 }
