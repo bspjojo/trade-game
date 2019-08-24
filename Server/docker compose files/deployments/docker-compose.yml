@@ -3,30 +3,33 @@ services:
     watcher:
         image: "watcherclient:latest"
         ports:
-            - "4301:4301"
+            - "4302:4302"
         depends_on:
             - api
-        #todo config - api address
+        volumes:
+            - "./volumes/watcher/config:/usr/share/nginx/html/assets/config"
     scoring:
         image: "scoringclient:latest"
         ports:
             - "4301:4301"
         depends_on:
             - api
-        #todo config - api address
+        volumes:
+            - "./volumes/scoring/config:/usr/share/nginx/html/assets/config"
     api:
         image: "game.server:latest"
         ports:
             - "4300:4300"
         depends_on:
             - db
-        #todo config - cors - db
+        volumes:
+            - "./volumes/api/config.json:/app/appsettings.Production.json"
     db:
         image: "microsoft/mssql-server-linux"
-        container_name: scout-trade-game-sql
+        container_name: trade-game-sql
         environment:
             SA_PASSWORD: "MSSQLServer_Linux"
             ACCEPT_EULA: "Y"
         ports:
-            - "9001:1433"
+            - "9004:1433"
         restart: always
