@@ -27,6 +27,6 @@ namespace Game.Server
                     logging.AddEventSourceLogger();
                 })
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:4300/", "http://*:4300/");
+                .UseUrls("http://*:4300/");
     }
 }
