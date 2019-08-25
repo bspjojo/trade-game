@@ -440,7 +440,7 @@ namespace Game.Server.DataRepositories.SQL
                     Grain = r.Grain,
                     Energy = r.Energy,
                     Textiles = r.Textiles,
-                    Score = r.Meat + r.Chocolate + r.Grain + r.Energy + r.Textiles
+                    Score = (r.Meat * 3) + r.Chocolate + r.Grain + (r.Energy * 2) + r.Textiles
                 };
 
                 scenarioCountry.CurrentScore += t.Score;
