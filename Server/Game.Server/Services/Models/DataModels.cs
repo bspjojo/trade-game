@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Game.Server.Services.Models
 {
     public class ScoreServiceResult

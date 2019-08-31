@@ -1,7 +1,5 @@
-using Game.Server.Services.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace Game.Server.Hubs
