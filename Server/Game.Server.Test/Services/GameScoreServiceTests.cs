@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using Game.Server.Services;
 using Game.Server.Services.Models;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace Game.Server.Test.Services
@@ -37,7 +39,8 @@ namespace Game.Server.Test.Services
                 Textiles = 5
             };
 
-            var gss = new GameScoreService();
+            var mockLogger = new Mock<ILogger<GameScoreService>>();
+            var gss = new GameScoreService(mockLogger.Object);
             gss.CalculateYearValues(breakEven, targets, consumptionRecorded, out var excess, out var scores, out var nextYearTargets);
 
             Assert.Equal(6, nextYearTargets.Chocolate);
@@ -77,7 +80,8 @@ namespace Game.Server.Test.Services
                 Textiles = 5
             };
 
-            var gss = new GameScoreService();
+            var mockLogger = new Mock<ILogger<GameScoreService>>();
+            var gss = new GameScoreService(mockLogger.Object);
             gss.CalculateYearValues(breakEven, targets, consumptionRecorded, out var excess, out var scores, out var nextYearTargets);
 
             Assert.Equal(-1, scores.Chocolate);
@@ -117,7 +121,8 @@ namespace Game.Server.Test.Services
                 Textiles = 5
             };
 
-            var gss = new GameScoreService();
+            var mockLogger = new Mock<ILogger<GameScoreService>>();
+            var gss = new GameScoreService(mockLogger.Object);
             gss.CalculateYearValues(breakEven, targets, consumptionRecorded, out var excess, out var scores, out var nextYearTargets);
 
             Assert.Equal(0, excess.Chocolate);

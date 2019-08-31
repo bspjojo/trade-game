@@ -4,6 +4,7 @@ using Game.Server.DataRepositories;
 using Game.Server.Models;
 using Game.Server.Services;
 using Game.Server.Services.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -47,9 +48,11 @@ namespace Game.Server.Test.Services
             _recorded = new ConsumptionResources();
             _mockGameScoreService.Setup(m => m.CalculateYearValues(_breakEven, _targetsForCurrentYear, _recorded, out _excess, out _scores, out _targets));
             _mockGameUpdatedService = new Mock<IGameUpdatedService>();
-            _mockGameUpdatedService.Setup(m => m.GameUpdated(It.IsAny<string>()));
+            _mockGameUpdatedService.Setup(m => m.GameUpdated(It.IsAny<string>())).Returns(() => Task.CompletedTask);
 
-            _gameFlowService = new GameFlowService(_mockGameDataService.Object, _mockGameScoreService.Object, _mockGameUpdatedService.Object);
+            var mockLogger = new Mock<ILogger<GameFlowService>>();
+
+            _gameFlowService = new GameFlowService(mockLogger.Object, _mockGameDataService.Object, _mockGameScoreService.Object, _mockGameUpdatedService.Object);
         }
 
         #region ExecuteUpdateScoreFlow
