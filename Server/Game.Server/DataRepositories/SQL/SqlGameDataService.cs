@@ -111,6 +111,9 @@ namespace Game.Server.DataRepositories.SQL
                     GameName = gameName,
                     GameStartDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture),
                 });
+
+                _logger.LogInformation($"Game created {gameId}");
+
                 connection.Close();
             }
 
@@ -179,7 +182,7 @@ namespace Game.Server.DataRepositories.SQL
 
         public async Task<ConsumptionResources> GetBreakEvenForACountry(string countryId)
         {
-            _logger.LogInformation("Getting break even for country with id games.");
+            _logger.LogInformation($"Getting break even for country with id {countryId}.");
 
             var selectBreakEvenForACountryQuery = @"SELECT ScenarioCountries.Target_Chocolate
                                             , ScenarioCountries.Target_Energy
@@ -191,30 +194,34 @@ namespace Game.Server.DataRepositories.SQL
                                             ON ScenarioCountries.ID = GameCountries.ScenarioCountryID
                                         WHERE GameCountries.ID = @CountryId";
 
-            ConsumptionResourceDAO result = null;
+            GameScenarioCountryDAO result = null;
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                result = await connection.QueryFirstAsync<ConsumptionResourceDAO>(selectBreakEvenForACountryQuery, new
+                result = await connection.QueryFirstAsync<GameScenarioCountryDAO>(selectBreakEvenForACountryQuery, new
                 {
                     CountryId = countryId
                 });
                 connection.Close();
             }
 
+            _logger.LogInformation($"Break even retrieved for country with id {countryId}.");
+
             return new ConsumptionResources
             {
-                Meat = result.Meat,
-                Chocolate = result.Chocolate,
-                Textiles = result.Textiles,
-                Energy = result.Energy,
-                Grain = result.Grain
+                Meat = result.Target_Meat,
+                Chocolate = result.Target_Chocolate,
+                Textiles = result.Target_Textiles,
+                Energy = result.Target_Energy,
+                Grain = result.Target_Grain
             };
         }
 
         public async Task<ConsumptionResources> GetTargetsForACountryForAYear(string countryId, int year)
         {
+            _logger.LogInformation($"Getting targets retrieved for country with id {countryId} and year {year}.");
+
             var yearTargetsForCountryForYear = @"SELECT YearTargets.Chocolate
                                                     , YearTargets.Energy
                                                     , YearTargets.Grain
@@ -237,6 +244,8 @@ namespace Game.Server.DataRepositories.SQL
                 connection.Close();
             }
 
+            _logger.LogInformation($"Targets retrieved for country with id {countryId} and year {year}.");
+
             return new ConsumptionResources
             {
                 Meat = result.Meat,
@@ -249,6 +258,8 @@ namespace Game.Server.DataRepositories.SQL
 
         public async Task<GameInformationResult> GetGameInformationForACountry(string countryId)
         {
+            _logger.LogInformation($"Getting game information for a country {countryId}.");
+
             var gameInformationQuery = @"SELECT dbo.Games.ID
                                             , dbo.Games.CurrentYear
                                         FROM dbo.Games JOIN dbo.Game_Countries ON dbo.Games.ID = dbo.Game_Countries.GameID
@@ -266,6 +277,8 @@ namespace Game.Server.DataRepositories.SQL
                 connection.Close();
             }
 
+            _logger.LogInformation($"Retrieved game information for a country {countryId}.");
+
             return new GameInformationResult
             {
                 Name = result.Name,
@@ -276,6 +289,8 @@ namespace Game.Server.DataRepositories.SQL
 
         public async Task SetCountryYearExcess(string countryId, int year, ConsumptionResources excess)
         {
+            _logger.LogInformation($"Setting excess on country {countryId} for year {year}.");
+
             var updateExcessForCountryForYear = @"BEGIN TRAN
                                                 UPDATE dbo.Game_Country_Year_Excess
                                                 SET Chocolate = @Chocolate, Energy = @Energy, Grain = @Grain, Meat = @Meat, Textiles = @Textiles
@@ -303,10 +318,14 @@ namespace Game.Server.DataRepositories.SQL
                 });
                 connection.Close();
             }
+
+            _logger.LogInformation($"Set excess on country {countryId} for year {year}. Chocolate: {excess.Chocolate}, Energy: {excess.Energy}, Grain: {excess.Grain}, Meat: {excess.Meat}, Textiles: {excess.Textiles}");
         }
 
         public async Task SetCountryYearScores(string countryId, int year, ConsumptionResources score)
         {
+            _logger.LogInformation($"Setting scores on country {countryId} for year {year}.");
+
             var updateScoresForCountryForYear = @"BEGIN TRAN
                                                 UPDATE dbo.Game_Country_Year_Score
                                                 SET Chocolate = @Chocolate, Energy = @Energy, Grain = @Grain, Meat = @Meat, Textiles = @Textiles
@@ -334,10 +353,14 @@ namespace Game.Server.DataRepositories.SQL
                 });
                 connection.Close();
             }
+
+            _logger.LogInformation($"Set scores on country {countryId} for year {year}. Chocolate: {score.Chocolate}, Energy: {score.Energy}, Grain: {score.Grain}, Meat: {score.Meat}, Textiles: {score.Textiles}");
         }
 
         public async Task SetCountryYearTargets(string countryId, int year, ConsumptionResources targets)
         {
+            _logger.LogInformation($"Setting targets on country {countryId} for year {year}.");
+
             var updateTargetsForCountryForYear = @"BEGIN TRAN
                                                 UPDATE dbo.Game_Country_Year_Targets
                                                 SET Chocolate = @Chocolate, Energy = @Energy, Grain = @Grain, Meat = @Meat, Textiles = @Textiles
@@ -365,6 +388,8 @@ namespace Game.Server.DataRepositories.SQL
                 });
                 connection.Close();
             }
+
+            _logger.LogInformation($"Set targets on country {countryId} for year {year}. Chocolate: {targets.Chocolate}, Energy: {targets.Energy}, Grain: {targets.Grain}, Meat: {targets.Meat}, Textiles: {targets.Textiles}");
         }
 
         public async Task<GameScoresBroadcastModel> GetGameScores(string gameId)
@@ -416,6 +441,8 @@ namespace Game.Server.DataRepositories.SQL
 
             foreach (var r in scoresResult)
             {
+                _logger.LogInformation($"Processing {r.GameCountryId}:{r.Year}, {r.Name}");
+
                 ScenarioCountry scenarioCountry;
 
                 if (!countryDictionary.TryGetValue(r.GameCountryId.ToString(), out scenarioCountry))
@@ -445,6 +472,8 @@ namespace Game.Server.DataRepositories.SQL
 
                 scenarioCountry.CurrentScore += t.Score;
                 scenarioCountry.Scores.Add(t);
+
+                _logger.LogInformation($"Processed {r.GameCountryId}:{r.Year}, {r.Name}. Score: {t.Score}");
             }
 
             foreach (var item in countryDictionary.Values)
@@ -466,6 +495,8 @@ namespace Game.Server.DataRepositories.SQL
 
         public async Task UpdateCurrentYearForGame(string gameId, int year)
         {
+            _logger.LogInformation($"Updating year for {gameId}");
+
             var updateYearSql = @"UPDATE Games
                                   SET CurrentYear = @NewYear
                                   WHERE Games.ID = @GameID";
@@ -482,6 +513,8 @@ namespace Game.Server.DataRepositories.SQL
 
                 connection.Close();
             }
+
+            _logger.LogInformation($"Year updated for {gameId}:{year}");
         }
     }
 }
