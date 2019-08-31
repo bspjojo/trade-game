@@ -3,6 +3,7 @@ using Game.Server.Hubs;
 using Game.Server.Services;
 using Game.Server.Services.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -33,7 +34,9 @@ namespace Game.Server.Test.Services
             _mockGameHubContext = new Mock<IHubContext<GameHub, IGameHub>>();
             _mockGameHubContext.Setup(m => m.Clients).Returns(() => mockHubClients.Object);
 
-            _gameHubService = new GameHubService(_mockGameHubContext.Object);
+            var mockLogger = new Mock<ILogger<GameHubService>>();
+
+            _gameHubService = new GameHubService(mockLogger.Object, _mockGameHubContext.Object);
         }
 
         [Fact]

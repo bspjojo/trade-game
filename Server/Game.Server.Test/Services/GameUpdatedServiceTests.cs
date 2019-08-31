@@ -1,6 +1,7 @@
 using Game.Server.DataRepositories;
 using Game.Server.Services;
 using Game.Server.Services.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -21,8 +22,9 @@ namespace Game.Server.Test.Services
             _mockGameDataService.Setup(m => m.GetGameScores("gameId")).ReturnsAsync(() => _broadcastModel);
 
             _mockGameHubService = new Mock<IGameHubService>();
+            var mockLogger = new Mock<ILogger<GameUpdatedService>>();
 
-            _gameUpdatedService = new GameUpdatedService(_mockGameDataService.Object, _mockGameHubService.Object);
+            _gameUpdatedService = new GameUpdatedService(mockLogger.Object, _mockGameDataService.Object, _mockGameHubService.Object);
         }
 
         [Fact]
